@@ -21,9 +21,9 @@
         <h3>Fare: <%= request.getAttribute("seatCost")%></h3>
         <table>
             <tr>
-                <!-- COMMENT HTML WITH THIS -->
+                <!-- COMMENT HTML WITH THIS
                 <td><p>Back to previous page</p></td>
-                <td><input type="button" value="back" onclick="location.href = document.referrer; return false;" style="width:75px" /></td>
+                <td><input type="button" value="back" onclick="location.href = document.referrer; return false;" style="width:75px" /></td> -->
             </tr>
             <td>
             <tr>

@@ -30,11 +30,11 @@ public class BookingServlet extends HttpServlet {
 
     SeatManager seatManager;
 
-    int seatNumber = 0;
-    SeatTypeEnum seatType;
-    String msg = "";
-    boolean[] seats = null;
-    String url = "";
+    private int seatNumber;
+    private SeatTypeEnum seatType;
+    private String msg = "";
+    private boolean[] seats = null;
+    private String url = "";
 
     /*
      * Creates a new instance of CustomerManager
@@ -42,13 +42,13 @@ public class BookingServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         seatManager = new SeatManager();
-        seats = seatManager.assignSeat(seatNumber, seatType);
+        seats = seatManager.initSeats(seatNumber, seatType);
+
     }
 
     public void chooseSeat(HttpServletRequest request, HttpServletResponse response) {
         url = "/indexRevA.jsp";
         String passenger = request.getParameter("Passenger");
-
         boolean isSeatBooked = false;
         if (!seats[seatNumber]) {
             seatManager.assignSeat(seatNumber, seatType);

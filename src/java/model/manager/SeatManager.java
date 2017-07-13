@@ -33,6 +33,13 @@ public class SeatManager {
         }
     }
 
+    public boolean[] initSeats(int seatNumber, SeatTypeEnum seatType) {
+        for (int i = 0; i < seats.length; i++) {
+            seats[i] = false;
+        }
+        return seats;
+    }
+
     public void fullyBooked() {
         for (int i = 0; i < seats.length; i++) {
             if (seats[i] = true) {
@@ -56,12 +63,15 @@ public class SeatManager {
             if (economyCounter > 12) {
                 System.out.println("All the Economy seats have been used up.");
             }
+
         } else if (seatType == SeatTypeEnum.FIRSTCLASS) {
             firstClassCounter++;
             if (firstClassCounter > 12) {
                 System.out.println("All the First Class seats have been used up.");
             }
+
         }
+
         seats[seatNumber] = true;
 
         return seats;
