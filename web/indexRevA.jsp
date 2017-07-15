@@ -2,10 +2,11 @@
     Document   : index
     Created on : 11-Jul-2017, 11:37:31
     Author     : james chalmers Open University F6418079
-    Alba Airways application M813-TMA02-ChooseSeat
+    Project    : Alba Airways application M813-TMA02-ChooseSeat
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.manager.SeatManager" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,7 +17,7 @@
         <div> 
             <form name="chooseSeat" action="BookingServlet" method="GET">
                 <table cellpadding="0" cellspacing="0" border="0" id="table" class="sortable">
-                    <thead>
+                    <!-- COMMENT HTML WITH THIS <thead>
                         <tr>
                             <th><h3></h3></th>
                             <th><h3></h3></th>
@@ -27,7 +28,7 @@
                             <th><h3></h3></th>
                             <th><h3></h3></th>
                         </tr>
-                    </thead>
+                    </thead>-->
                     <tbody>
                         <tr>
                             <td>
@@ -94,6 +95,7 @@
                                 <input type="submit" value="seat23E" name="submit" id="seat23E"/></td>
                         </tr>
                     </tbody>
+
                 </table><br />
                 <input type="radio" value="ADULT" name="Passenger" checked="checked"/><p>Adult</p>
                 <input type="radio" value="CHILD" name="Passenger" /><p>Child</p>

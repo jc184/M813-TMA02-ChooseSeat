@@ -5,7 +5,9 @@
  */
 package controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,7 +35,6 @@ public class BookingServlet extends HttpServlet {
     private int seatNumber;
     private SeatTypeEnum seatType;
     private String msg = "";
-    private boolean[] seats = null;
     private String url = "";
 
     /*
@@ -42,15 +43,17 @@ public class BookingServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         seatManager = new SeatManager();
-        seats = seatManager.initSeats(seatNumber, seatType);
-
     }
 
     public void chooseSeat(HttpServletRequest request, HttpServletResponse response) {
         url = "/indexRevA.jsp";
         String passenger = request.getParameter("Passenger");
         boolean isSeatBooked = false;
-        if (!seats[seatNumber]) {
+        if (seatManager.getSeats()[seatNumber]) {
+            msg = "This seat is already booked. Please choose another seat.";
+            request.setAttribute("msg", msg);
+            url = "/booked.jsp";
+        } else {
             seatManager.assignSeat(seatNumber, seatType);
             isSeatBooked = true;
             msg = "Your Seat Booking.";
@@ -71,15 +74,18 @@ public class BookingServlet extends HttpServlet {
                     request.setAttribute("seatType", seatType);
                 }
                 request.setAttribute("msg", msg);
-                request.setAttribute("seats", Arrays.toString(seats));
+                request.setAttribute("seats", Arrays.toString(seatManager.getSeats()));
             }
             url = "/message.jsp";
-        } else {
-            msg = "This seat is already booked. Please choose another seat.";
-            request.setAttribute("msg", msg);
-            url = "/booked.jsp";
         }
-
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\user\\Documents\\seats.ser");
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(seatManager.getSeats());
+            oos.flush();
+            oos.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
     }
 
     /**

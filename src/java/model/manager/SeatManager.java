@@ -5,6 +5,13 @@
  */
 package model.manager;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Random;
 import model.enums.SeatTypeEnum;
 
@@ -12,32 +19,66 @@ import model.enums.SeatTypeEnum;
  *
  * @author james
  */
-public class SeatManager {
+public class SeatManager implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final int NUMBER_OF_SEATS = 24;
-    private boolean[] seats;
+    private boolean[] seats = initSeats();
     private int firstClassCounter;//counter for first class
     private int economyCounter;//counter for economy class
     private boolean isSeatBooked;
     Random randomNumber = new Random();
 
     public SeatManager() {
-        this.seats = new boolean[NUMBER_OF_SEATS];
-        this.isSeatBooked = true;
-        //initSeats();
+        
+        this.seats = new boolean[NUMBER_OF_SEATS];//RESETS Seats TO FALSES
+        this.seats = initSeats();
+
     }
 
-    private void initSeats() {
-        for (int i = 0; i < seats.length; i++) {
-            seats[i] = false;
-        }
-    }
+//    private void initSeats() {
+//        for (int i = 0; i < seats.length; i++) {
+//            seats[i] = false;
+//        }
+//    }
+    public boolean[] initSeats() {
 
-    public boolean[] initSeats(int seatNumber, SeatTypeEnum seatType) {
-        for (int i = 0; i < seats.length; i++) {
-            seats[i] = false;
+        try (FileInputStream fis = new FileInputStream("C:\\Users\\user\\Documents\\seats.ser");
+                ObjectInputStream in = new ObjectInputStream(fis)) {
+            in.readObject();
+            String seatsString = (String) in.readObject();
+
+            seats = (boolean[]) in.readObject();
+            in.close();
+            System.out.println(Arrays.toString(seats));
+        } catch (ClassNotFoundException | IOException e) {
+            e.getMessage();
         }
         return seats;
+    }
+    
+
+
+    public int getNUMBER_OF_SEATS() {
+        return NUMBER_OF_SEATS;
+    }
+
+    public boolean[] getSeats() {
+        return seats;
+    }
+    
+
+    public int getFirstClassCounter() {
+        return firstClassCounter;
+    }
+
+    public int getEconomyCounter() {
+        return economyCounter;
+    }
+
+    public boolean isIsSeatBooked() {
+        return isSeatBooked;
     }
 
     public void fullyBooked() {
@@ -73,8 +114,29 @@ public class SeatManager {
         }
 
         seats[seatNumber] = true;
-
         return seats;
     }
 
+    public void writeSeats(ObjectOutputStream oos) {
+        try {
+            FileOutputStream fos = new FileOutputStream("C:\\Users\\user\\Documents\\seats.ser");
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(seats);
+            oos.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    public void retrieveSeats(ObjectInputStream ois) {
+        try {
+            FileInputStream fis = new FileInputStream("C:\\Users\\user\\Documents\\seats.ser");
+            ois = new ObjectInputStream(fis);
+            ois.readObject();
+
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.getMessage();
+        }
+    }
 }

@@ -2,7 +2,7 @@
     Document   : message
     Created on : 11-Jul-2017, 12:21:39
     Author     : james chalmers Open University F6418079
-    Alba Airways application M813-TMA02-ChooseSeat
+    Project    : Alba Airways application M813-TMA02-ChooseSeat
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
