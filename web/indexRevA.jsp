@@ -1,5 +1,5 @@
 <%-- 
-    Document   : index
+    Document   : indexRevA.jsp
     Created on : 11-Jul-2017, 11:37:31
     Author     : james chalmers Open University F6418079
     Project    : Alba Airways application M813-TMA02-ChooseSeat
@@ -19,34 +19,34 @@
                 <table cellpadding="0" cellspacing="0" border="0" id="table" class="sortable">
                     <!-- COMMENT HTML WITH THIS <thead>
                         <tr>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
-                            <th><h3></h3></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>-->
                     <tbody>
                         <tr>
                             <td>
-                                <input type="submit" value="seat00F" name="submit" id="seat00F" onclick="seatIsBooked"/></td>
+                                <input type="submit" value="seat00F" name="submit" id="seat00F" onclick=""/></td>
                             <td>
-                                <input type="submit" value="seat03F" name="submit" id="seat03F"/></td>
+                                <input type="submit" value="seat03F" name="submit" id="seat03F" onclick=""/></td>
                             <td>
-                                <input type="submit" value="seat06F" name="submit" id="seat06F"/></td>
+                                <input type="submit" value="seat06F" name="submit" id="seat06F" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                             <td>
-                                <input type="submit" value="seat09F" name="submit" id="seat09F"/></td>
+                                <input type="submit" value="seat09F" name="submit" id="seat09F" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                             <td>
-                                <input type="submit" value="seat12E" name="submit" id="seat12E"/></td>
+                                <input type="submit" value="seat12E" name="submit" id="seat12E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                             <td>
-                                <input type="submit" value="seat15E" name="submit" id="seat15E"/></td>
+                                <input type="submit" value="seat15E" name="submit" id="seat15E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                             <td>
-                                <input type="submit" value="seat18E" name="submit" id="seat18E"/></td>
+                                <input type="submit" value="seat18E" name="submit" id="seat18E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                             <td>
-                                <input type="submit" value="seat21E" name="submit" id="seat21E"/></td>
+                                <input type="submit" value="seat21E" name="submit" id="seat21E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
                         </tr>
                         <tr>
                             <td>
@@ -101,6 +101,15 @@
                 <input type="radio" value="CHILD" name="Passenger" /><p>Child</p>
                 <input type="radio" value="INFANT" name="Passenger" /><p>Infant</p>
             </form>
+
+            <h3><%= request.getAttribute("seats")%></h3>
         </div>
+        <script type="text/javascript">
+            function getValue() {
+                string = "<%=request.getAttribute("returnVal")%>";
+                put(string);
+            }
+        </script>
+        <h3><%= request.getAttribute("returnVal")%></h3>
     </body>
 </html>

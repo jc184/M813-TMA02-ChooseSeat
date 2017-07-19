@@ -13,7 +13,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h3>Info:<%= request.getAttribute("msg")%></h3>
+        <h3>Info: <%= request.getAttribute("msg")%></h3>
         <table>
             <tr>
                 <!-- COMMENT HTML WITH THIS

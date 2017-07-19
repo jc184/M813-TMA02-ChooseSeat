@@ -15,12 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import model.enums.SeatTypeEnum;
 
 /**
  * Alba Airways application M813-TMA02-ChooseSeat
+ *
  * @author james chalmers Open University F6418079
  */
 @Entity
@@ -35,16 +38,36 @@ public class Seat implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected SeatPK seatPK;
+    private SeatPK seatPK;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "SeatType")
-    private String seatType;
-    @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")
+    private SeatTypeEnum seatType;
+    @JoinColumn(name = "BookingId", referencedColumnName = "BookingId")
     @ManyToOne
-    private Booking bookingBookingId;
+    private Booking bookingId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "SeatBooked")
+    private boolean booked;
 
+    public Seat(SingularAttribute<Seat, SeatPK> seatPK, SeatTypeEnum seatType, SingularAttribute<Seat, Booking> bookingId, boolean booked) {
+        this.seatPK = (SeatPK) seatPK;
+        this.seatType = seatType;
+        this.bookingId = (Booking) bookingId;
+        this.booked = booked;
+    }
+
+    public boolean isBooked() {
+        return booked;
+    }
+
+    public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
+    
     public Seat() {
     }
 
@@ -52,14 +75,19 @@ public class Seat implements Serializable {
         this.seatPK = seatPK;
     }
 
-    public Seat(SeatPK seatPK, String seatType) {
+    public Seat(SeatPK seatPK, SeatTypeEnum seatType, Booking bookingId, boolean booked) {
         this.seatPK = seatPK;
         this.seatType = seatType;
+        this.bookingId = bookingId;
+        this.booked = booked;
     }
 
-    public Seat(int seatNo, int aircraftAircraftId) {
-        this.seatPK = new SeatPK(seatNo, aircraftAircraftId);
-    }
+//    public Seat(int seatNo, int aircraftId, SeatTypeEnum seatType, boolean booked) {
+//        this.seatPK = new SeatPK(seatNo, aircraftId);
+//        this.seatType = seatType;
+//        this.booked = booked;
+//    }
+
 
     public SeatPK getSeatPK() {
         return seatPK;
@@ -69,20 +97,20 @@ public class Seat implements Serializable {
         this.seatPK = seatPK;
     }
 
-    public String getSeatType() {
+    public SeatTypeEnum getSeatType() {
         return seatType;
     }
 
-    public void setSeatType(String seatType) {
+    public void setSeatType(SeatTypeEnum seatType) {
         this.seatType = seatType;
     }
 
-    public Booking getBookingBookingId() {
-        return bookingBookingId;
+    public Booking getBookingId() {
+        return bookingId;
     }
 
-    public void setBookingBookingId(Booking bookingBookingId) {
-        this.bookingBookingId = bookingBookingId;
+    public void setBookingId(Booking bookingId) {
+        this.bookingId = bookingId;
     }
 
     @Override
@@ -109,5 +137,5 @@ public class Seat implements Serializable {
     public String toString() {
         return "entities.Seat[ seatPK=" + seatPK + " ]";
     }
-    
+
 }
