@@ -11,12 +11,42 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="styles/styles.css" type="text/css" rel="stylesheet">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax({
+                    type: "get",
+                    url: "BookingServlet",
+                    dataType: 'json',
+                    error: function () {
+                        alert("Error Occurred");
+                    },
+                    success: function (data) {
+                        var receivedData = [];
+
+                        $.each(data.jsonArray, function (index) {
+                            $.each(data.jsonArray[index], function (key, value) {
+                                var point = [];
+                                point.push(key);
+                                point.push(value);
+                                receivedData.push(point);
+                                document.getElementById("output").innerHTML = point;
+                                document.getElementsByClassName("btn").style.color = "red";
+                            });
+                        });
+                    }
+                });
+            })
+            ;
+
+        </script>
         <title>JSP Page</title>
     </head>
     <body>
-        <div> 
-            <form name="chooseSeat" action="BookingServlet" method="GET">
-                <table cellpadding="0" cellspacing="0" border="0" id="table" class="sortable">
+        <div class="SeatingLayout"> 
+            <form name="chooseSeat" action="BookingServlet" method="POST">
+                <table cellpadding="0" cellspacing="0" border="0" id="table">
                     <!-- COMMENT HTML WITH THIS <thead>
                         <tr>
                             <th></th>
@@ -32,39 +62,39 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="submit" value="seat00F" name="submit" id="seat00F" onclick=""/></td>
+                                <input type="submit" value="seat00F" name="submit" id="0" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat03F" name="submit" id="seat03F" onclick=""/></td>
+                                <input type="submit" value="seat03F" name="submit" id="3" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat06F" name="submit" id="seat06F" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat06F" name="submit" id="6" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat09F" name="submit" id="seat09F" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat09F" name="submit" id="9" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat12E" name="submit" id="seat12E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat12E" name="submit" id="12" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat15E" name="submit" id="seat15E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat15E" name="submit" id="15" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat18E" name="submit" id="seat18E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat18E" name="submit" id="18" class="btn" /></td>
                             <td>
-                                <input type="submit" value="seat21E" name="submit" id="seat21E" onclick="<%=request.getAttribute("returnVal")%>"/></td>
+                                <input type="submit" value="seat21E" name="submit" id="21" class="btn" /></td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="submit" value="seat01F" name="submit" id="seat01F"/></td>
+                                <input type="submit" value="seat01F" name="submit" id="1" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat04F" name="submit" id="seat04F"/></td>
+                                <input type="submit" value="seat04F" name="submit" id="4" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat07F" name="submit" id="seat07F"/></td>
+                                <input type="submit" value="seat07F" name="submit" id="7" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat10F" name="submit" id="seat10F"/></td>
+                                <input type="submit" value="seat10F" name="submit" id="10" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat13E" name="submit" id="seat13E"/></td>
+                                <input type="submit" value="seat13E" name="submit" id="13" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat16E" name="submit" id="seat16E"/></td>
+                                <input type="submit" value="seat16E" name="submit" id="16" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat19E" name="submit" id="seat19E"/></td>
+                                <input type="submit" value="seat19E" name="submit" id="19" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat22E" name="submit" id="seat22E"/></td>
+                                <input type="submit" value="seat22E" name="submit" id="22" class="btn"/></td>
                         </tr>
                         <tr>
                             <th><h3></h3></th>
@@ -78,21 +108,21 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="submit" value="seat02F" name="submit" id="seat02F"/></td>
+                                <input type="submit" value="seat02F" name="submit" id="2" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat05F" name="submit" id="seat05F"/></td>
+                                <input type="submit" value="seat05F" name="submit" id="5" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat08F" name="submit" id="seat08F"/></td>
+                                <input type="submit" value="seat08F" name="submit" id="8" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat11F" name="submit" id="seat11F"/></td>
+                                <input type="submit" value="seat11F" name="submit" id="11" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat14E" name="submit" id="seat14E"/></td>
+                                <input type="submit" value="seat14E" name="submit" id="14" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat17E" name="submit" id="seat17E"/></td>
+                                <input type="submit" value="seat17E" name="submit" id="17" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat20E" name="submit" id="seat20E"/></td>
+                                <input type="submit" value="seat20E" name="submit" id="20" class="btn"/></td>
                             <td>
-                                <input type="submit" value="seat23E" name="submit" id="seat23E"/></td>
+                                <input type="submit" value="seat23E" name="submit" id="23" class="btn"/></td>
                         </tr>
                     </tbody>
 
@@ -101,15 +131,10 @@
                 <input type="radio" value="CHILD" name="Passenger" /><p>Child</p>
                 <input type="radio" value="INFANT" name="Passenger" /><p>Infant</p>
             </form>
+            <div>
+                <p id="output"></p></div>
 
-            <h3><%= request.getAttribute("seats")%></h3>
         </div>
-        <script type="text/javascript">
-            function getValue() {
-                string = "<%=request.getAttribute("returnVal")%>";
-                put(string);
-            }
-        </script>
-        <h3><%= request.getAttribute("returnVal")%></h3>
+        <h3><%= request.getAttribute("seats")%></h3>
     </body>
 </html>

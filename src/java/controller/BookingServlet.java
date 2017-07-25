@@ -8,6 +8,7 @@ package controller;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,8 @@ import model.enums.SeatEnum;
 import model.enums.SeatTypeEnum;
 import model.manager.SeatManager;
 import model.entities.SeatPK;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * Alba Airways application M813-TMA02-ChooseSeat
@@ -40,8 +43,9 @@ public class BookingServlet extends HttpServlet {
     private SeatTypeEnum seatType;
     private String msg = "";
     private String url = "";
-    private String returnVal;
     SeatPK seatPK;
+    private boolean isSeatBooked;
+    
 
     /*
      * Creates a new instance of CustomerManager
@@ -50,10 +54,7 @@ public class BookingServlet extends HttpServlet {
     public void init() throws ServletException {
         seatManager = new SeatManager();
         seatPK = new SeatPK();//?????????
-
     }
-
-
 
     public void chooseSeat(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
 
@@ -61,7 +62,7 @@ public class BookingServlet extends HttpServlet {
 
             url = "/indexRevA.jsp";
             String passenger = request.getParameter("Passenger");
-            boolean isSeatBooked = false;
+            isSeatBooked = false;
             if (seatManager.getSeats()[seatNumber] == true) {
                 msg = "This seat is already booked. Please choose another seat.";
                 request.setAttribute("msg", msg);
@@ -70,8 +71,6 @@ public class BookingServlet extends HttpServlet {
                 setSeatPK(seatNumber, aircraftId);
                 seatManager.assignSeat(seatNumber, seatType);
                 isSeatBooked = true;
-                returnVal = "style=\"color:red\"";
-                request.setAttribute("returnVal", returnVal);
                 msg = "Your Seat Booking.";
                 for (SeatEnum seatEnum : SeatEnum.values()) {
                     if (seatNumber == seatEnum.ordinal()) {
@@ -137,122 +136,98 @@ public class BookingServlet extends HttpServlet {
             if (submit.equals("seat00F")) {
                 seatNumber = 0;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat01F")) {
                 seatNumber = 1;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat02F")) {
                 seatNumber = 2;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat03F")) {
                 seatNumber = 3;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat04F")) {
                 seatNumber = 4;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat05F")) {
                 seatNumber = 5;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat06F")) {
                 seatNumber = 6;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat07F")) {
                 seatNumber = 7;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat08F")) {
                 seatNumber = 8;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat09F")) {
                 seatNumber = 9;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat10F")) {
                 seatNumber = 10;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat11F")) {
                 seatNumber = 11;
                 seatType = SeatTypeEnum.FIRSTCLASS;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat12E")) {
                 seatNumber = 12;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat13E")) {
                 seatNumber = 13;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat14E")) {
                 seatNumber = 14;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat15E")) {
                 seatNumber = 15;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat16E")) {
                 seatNumber = 16;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat17E")) {
                 seatNumber = 17;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat18E")) {
                 seatNumber = 18;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat19E")) {
                 seatNumber = 19;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat20E")) {
                 seatNumber = 20;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat21E")) {
                 seatNumber = 21;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat22E")) {
                 seatNumber = 22;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seat23E")) {
                 seatNumber = 23;
                 seatType = SeatTypeEnum.ECONOMY;
-                //setSeatPK(seatNumber, aircraftId);
                 chooseSeat(request, response);
             } else if (submit.equals("seats")) {
                 url = "/indexRevA.jsp";
@@ -276,9 +251,21 @@ public class BookingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BookingServlet.class.getName()).log(Level.SEVERE, null, ex);
+            response.setContentType("application/json;charset=utf-8");
+
+            JSONObject json = new JSONObject();
+            JSONArray array = new JSONArray();
+            JSONObject member = new JSONObject();
+
+            member.put("arrayData", seatManager.getSeats());
+            array.add(member);
+
+            json.put("jsonArray", array);
+
+            PrintWriter pw = response.getWriter();
+            pw.print(json.toString());
+        } catch (IOException e) {
+            e.getMessage();
         }
     }
 
