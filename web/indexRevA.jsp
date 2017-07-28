@@ -14,7 +14,7 @@
         <link href="styles/styles.css" type="text/css" rel="stylesheet">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $.ajax({
                     type: "get",
                     url: "BookingServlet",
@@ -24,7 +24,6 @@
                     },
                     success: function (data) {
                         var receivedData = [];
-
                         $.each(data.jsonArray, function (index) {
                             $.each(data.jsonArray[index], function (key, value) {
                                 var point = [];
@@ -32,14 +31,23 @@
                                 point.push(value);
                                 receivedData.push(point);
                                 document.getElementById("output").innerHTML = point;
-                                document.getElementsByClassName("btn").style.color = "red";
+                                $.each(document.getElementsByClassName("btn"), function (index) { 
+                                    //var x = [Array.from(document.getElementsByClassName("btn")[index].id)];
+                                    //document.getElementsByClassName("btn")[index].id;
+                                    $.each(point[1], function (index, value) {
+                                        //index = [Array.from(document.getElementsByClassName("btn")[index].id)];
+                                        //index = index[1];
+                                        if (value === true) {
+                                            document.getElementsByClassName("btn")[index].style.color = "red";//
+                                        }
+                                    });
+                                }
+                                );
                             });
                         });
                     }
                 });
-            })
-            ;
-
+            });
         </script>
         <title>JSP Page</title>
     </head>

@@ -60,7 +60,7 @@ public class BookingServlet extends HttpServlet {
 
         if (seatManager.checkNotFullyBooked()) {
 
-            url = "/indexRevA.jsp";
+            url = "/indexRevB.jsp";
             String passenger = request.getParameter("Passenger");
             isSeatBooked = false;
             if (seatManager.getSeats()[seatNumber] == true) {
@@ -230,7 +230,7 @@ public class BookingServlet extends HttpServlet {
                 seatType = SeatTypeEnum.ECONOMY;
                 chooseSeat(request, response);
             } else if (submit.equals("seats")) {
-                url = "/indexRevA.jsp";
+                url = "/indexRevB.jsp";
             }
         }
         RequestDispatcher dispatcher
@@ -238,7 +238,6 @@ public class BookingServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
