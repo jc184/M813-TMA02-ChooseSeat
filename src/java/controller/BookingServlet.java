@@ -60,7 +60,7 @@ public class BookingServlet extends HttpServlet {
 
         if (seatManager.checkNotFullyBooked()) {
 
-            url = "/indexRevB.jsp";
+            //url = "/indexRevB.jsp";
             String passenger = request.getParameter("Passenger");
             isSeatBooked = false;
             if (seatManager.getSeats()[seatNumber] == true) {
@@ -70,6 +70,7 @@ public class BookingServlet extends HttpServlet {
             } else {
                 setSeatPK(seatNumber, aircraftId);
                 seatManager.assignSeat(seatNumber, seatType);
+                //seatManager.getSeats()[seatNumber] = true;
                 isSeatBooked = true;
                 msg = "Your Seat Booking.";
                 for (SeatEnum seatEnum : SeatEnum.values()) {
@@ -133,104 +134,132 @@ public class BookingServlet extends HttpServlet {
         String submit = request.getParameter("submit");
         if (submit != null && submit.length() > 0) {
 
-            if (submit.equals("seat00F")) {
-                seatNumber = 0;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat01F")) {
-                seatNumber = 1;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat02F")) {
-                seatNumber = 2;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat03F")) {
-                seatNumber = 3;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat04F")) {
-                seatNumber = 4;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat05F")) {
-                seatNumber = 5;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat06F")) {
-                seatNumber = 6;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat07F")) {
-                seatNumber = 7;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat08F")) {
-                seatNumber = 8;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat09F")) {
-                seatNumber = 9;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat10F")) {
-                seatNumber = 10;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat11F")) {
-                seatNumber = 11;
-                seatType = SeatTypeEnum.FIRSTCLASS;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat12E")) {
-                seatNumber = 12;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat13E")) {
-                seatNumber = 13;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat14E")) {
-                seatNumber = 14;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat15E")) {
-                seatNumber = 15;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat16E")) {
-                seatNumber = 16;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat17E")) {
-                seatNumber = 17;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat18E")) {
-                seatNumber = 18;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat19E")) {
-                seatNumber = 19;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat20E")) {
-                seatNumber = 20;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat21E")) {
-                seatNumber = 21;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat22E")) {
-                seatNumber = 22;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seat23E")) {
-                seatNumber = 23;
-                seatType = SeatTypeEnum.ECONOMY;
-                chooseSeat(request, response);
-            } else if (submit.equals("seats")) {
-                url = "/indexRevB.jsp";
+            switch (submit) {
+                case "seat00F":
+                    seatNumber = 0;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat01F":
+                    seatNumber = 1;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat02F":
+                    seatNumber = 2;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat03F":
+                    seatNumber = 3;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat04F":
+                    seatNumber = 4;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat05F":
+                    seatNumber = 5;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat06F":
+                    seatNumber = 6;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat07F":
+                    seatNumber = 7;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat08F":
+                    seatNumber = 8;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat09F":
+                    seatNumber = 9;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat10F":
+                    seatNumber = 10;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat11F":
+                    seatNumber = 11;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    chooseSeat(request, response);
+                    break;
+                case "seat12E":
+                    seatNumber = 12;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat13E":
+                    seatNumber = 13;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat14E":
+                    seatNumber = 14;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat15E":
+                    seatNumber = 15;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat16E":
+                    seatNumber = 16;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat17E":
+                    seatNumber = 17;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat18E":
+                    seatNumber = 18;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat19E":
+                    seatNumber = 19;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat20E":
+                    seatNumber = 20;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat21E":
+                    seatNumber = 21;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat22E":
+                    seatNumber = 22;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seat23E":
+                    seatNumber = 23;
+                    seatType = SeatTypeEnum.ECONOMY;
+                    chooseSeat(request, response);
+                    break;
+                case "seats":
+                    url = "/indexRevB.jsp";
+                    break;
+                default:
+                    break;
             }
         }
         RequestDispatcher dispatcher

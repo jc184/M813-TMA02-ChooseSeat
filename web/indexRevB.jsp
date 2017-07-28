@@ -15,10 +15,12 @@
         <style>
             table {
                 width:70px; float:left;
-
             }
             th,td {
                 padding: 0px;
+            }
+            radio {
+                float: bottom;
             }
         </style>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -43,7 +45,7 @@
                                 $.each(document.getElementsByClassName("btn"), function (index) {
                                     $.each(point[1], function (index, value) {
                                         if (value === true) {
-                                            document.getElementsByClassName("btn")[index].style.color = "red";//
+                                            document.getElementsByClassName("btn")[index].style.color = "red";
                                         }
                                     });
                                 }
@@ -188,18 +190,16 @@
                             </tr>
                         </tbody>
                     </table>
-                    <br />
                 </div>
-                <br /><br />
+                <br /><br /><br /><br /><br />
                 <div class="radio">
-                    <input type="radio" value="ADULT" name="Passenger" checked="checked"/><p>Adult</p>
-                    <input type="radio" value="CHILD" name="Passenger" /><p>Child</p>
-                    <input type="radio" value="INFANT" name="Passenger" /><p>Infant</p>
+                    <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p><br />
+                    <p><input type="radio" value="CHILD" name="Passenger" />Child</p><br />
+                    <p><input type="radio" value="INFANT" name="Passenger" />Infant</p><br />
                 </div></form>
-
             <div>
-                <p id="output"></p></div>
-
+                <p id="output"></p>
+            </div>
         </div>
         <h3><%= request.getAttribute("seats")%></h3>
     </body>

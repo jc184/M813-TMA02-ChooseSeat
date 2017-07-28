@@ -13,13 +13,13 @@ import model.manager.SeatManager;
  * @author james chalmers Open University F6418079
  */
 public enum SeatEnum {
-    SEAT00("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT01("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT02("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT03("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT04("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT05("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT06("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
+    SEAT00("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//0
+    SEAT01("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//1
+    SEAT02("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//2
+    SEAT03("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//3
+    SEAT04("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//4
+    SEAT05("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//5
+    SEAT06("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//etc
     SEAT07("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT08("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT09("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),

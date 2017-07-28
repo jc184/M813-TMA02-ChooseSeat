@@ -124,9 +124,7 @@ public class SeatManager implements Serializable {
             economyCounter++;
             if (economyCounter > 12) {
                 System.out.println("All the Economy seats have been used up.");
-            } else {
-
-            }
+            } 
         } else if (seatType == SeatTypeEnum.FIRSTCLASS) {
             firstClassCounter++;
             if (firstClassCounter > 12) {
@@ -134,9 +132,12 @@ public class SeatManager implements Serializable {
             } else {
                 SingularAttribute<Seat, Booking> bookingId = null;
                 addSeatBooking((SingularAttribute<Seat, SeatPK>) seatPK, seatType, bookingId, isSeatBooked);
+                
             }
         }
-        seats[seatNumber] = true;
+        //seats[seatNumber] = true;
+        this.getSeats()[seatNumber] = true;//STILL WRONG!
+        //this.setSeats(seats);//STILL WRONG!
 
         return seats;
     }
