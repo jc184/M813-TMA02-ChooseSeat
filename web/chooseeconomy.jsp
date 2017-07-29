@@ -1,8 +1,7 @@
 <%-- 
-    Document   : message
-    Created on : 11-Jul-2017, 12:21:39
-    Author     : james chalmers Open University F6418079
-    Project    : Alba Airways application M813-TMA02-ChooseSeat
+    Document   : chooseeconomy
+    Created on : 29-Jul-2017, 11:51:48
+    Author     : james
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,11 +12,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h3>Info: <%= request.getAttribute("msg")%></h3>
-        <h3>Seat Number: <%= request.getAttribute("seatNumber")%></h3>
-        <h3>Seat Type: <%= request.getAttribute("seatType")%></h3>
-        <h3>Passenger Type: <%= request.getAttribute("passengerType")%></h3>
-        <h3>Fare: <%= request.getAttribute("seatCost")%></h3>
+        <h3>Info: All the First Class seats have been booked. Would you like to choose
+        an Economy Seat instead?</h3>
         <table>
             <tr>
                 <!-- COMMENT HTML WITH THIS -->

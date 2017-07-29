@@ -5,11 +5,10 @@
  */
 package controller;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -22,7 +21,6 @@ import model.enums.PassengerEnum;
 import model.enums.SeatEnum;
 import model.enums.SeatTypeEnum;
 import model.manager.SeatManager;
-import model.entities.SeatPK;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -43,36 +41,110 @@ public class BookingServlet extends HttpServlet {
     private SeatTypeEnum seatType;
     private String msg = "";
     private String url = "";
-    SeatPK seatPK;
     private boolean isSeatBooked;
-    
+    private int economyCounter;
+    private int firstClassCounter;
+
 
     /*
-     * Creates a new instance of CustomerManager
+     * Creates a new instance of SeatManager
      */
     @Override
     public void init() throws ServletException {
         seatManager = new SeatManager();
-        seatPK = new SeatPK();//?????????
     }
 
-    public void chooseSeat(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
+    public void chooseSeat(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
 
-        if (seatManager.checkNotFullyBooked()) {
+//        if (seatManager.areAllSeatsBooked(seatManager.getSeats())) {
+        String passenger = request.getParameter("Passenger");
+        isSeatBooked = false;
+        if (seatManager.getSeats()[seatNumber] == true) {
+            msg = "This seat is already booked. Please choose another seat.";
+            request.setAttribute("msg", msg);
+            url = "/booked.jsp";
+        } else {
+//            if (seatType == SeatTypeEnum.ECONOMY) {
+//
+//                if (economyCounter < 12) {
+//
+//                    this.assignSeat(seatNumber, seatType);
+//                    isSeatBooked = true;
+//                    economyCounter++;
+//                } else if (economyCounter >= 12) {
+//                    msg = "All the Economy seats have been used up.";
+//                    request.setAttribute("msg", msg);
+//                    url = "/booked.jsp";
+//                }
 
-            //url = "/indexRevB.jsp";
-            String passenger = request.getParameter("Passenger");
-            isSeatBooked = false;
-            if (seatManager.getSeats()[seatNumber] == true) {
-                msg = "This seat is already booked. Please choose another seat.";
+            if (seatType == SeatTypeEnum.FIRSTCLASS) {
+
+                if (firstClassCounter < 12) {
+
+                    this.assignSeat(seatNumber, seatType);
+                    isSeatBooked = true;
+                    firstClassCounter++;
+                } else {
+                    msg = "All the Economy seats have been used up.";
+                    request.setAttribute("msg", msg);
+                    url = "/booked.jsp";
+                }
+            }
+
+            msg = "Your Seat Booking.";
+
+            for (SeatEnum seatEnum : SeatEnum.values()) {
+                if (seatNumber == seatEnum.ordinal()) {
+                    if (passenger.equals(PassengerEnum.ADULT.toString())) {
+                        double seatCost = SeatEnum.valueOf(seatEnum.toString()).getAdultFare();
+                        request.setAttribute("seatCost", seatCost);
+                    } else if (passenger.equals(PassengerEnum.CHILD.toString())) {
+                        double seatCost = SeatEnum.valueOf(seatEnum.toString()).getChildFare();
+                        request.setAttribute("seatCost", seatCost);
+                    } else if (passenger.equals(PassengerEnum.INFANT.toString())) {
+                        double seatCost = SeatEnum.valueOf(seatEnum.toString()).getInfantFare();
+                        request.setAttribute("seatCost", seatCost);
+                    }
+                    request.setAttribute("passengerType", passenger);
+                    request.setAttribute("seatNumber", seatNumber + 1);
+                    request.setAttribute("seatType", seatType);
+                }
                 request.setAttribute("msg", msg);
-                url = "/booked.jsp";
-            } else {
-                setSeatPK(seatNumber, aircraftId);
-                seatManager.assignSeat(seatNumber, seatType);
-                //seatManager.getSeats()[seatNumber] = true;
-                isSeatBooked = true;
-                msg = "Your Seat Booking.";
+                request.setAttribute("seats", Arrays.toString(seatManager.getSeats()));
+
+            }
+
+            url = "/message.jsp";
+        }
+
+//        } else {
+//            msg = "The Flight is fully booked. Please choose another Flight.";
+//            request.setAttribute("msg", msg);
+//            url = "/booked.jsp";
+//        }
+        //url = "/indexRevB.jsp";
+        RequestDispatcher dispatcher
+                = getServletContext().getRequestDispatcher(url);
+        dispatcher.forward(request, response);
+    }
+
+    public boolean[] assignSeat(int seatNumber, SeatTypeEnum seatType) throws ClassNotFoundException {
+
+        seatManager.getSeats()[seatNumber] = true;
+        return seatManager.getSeats();
+    }
+
+    public boolean[] allocateEconomySeat(HttpServletRequest request, HttpServletResponse response, SeatTypeEnum seatType) throws ServletException, IOException {
+        String passenger = request.getParameter("Passenger");
+        if (economyCounter < 12) {
+            Random random = new Random();
+            int economySeat = random.nextInt(23 - 12 + 1) + 12;
+            seatNumber = economySeat;
+            if (seatManager.getSeats()[seatNumber] == false) {
+                seatManager.getSeats()[seatNumber] = true;
+                economyCounter++;
+                msg = "Your Economy Class Seat Booking.";
+                request.setAttribute("msg", msg);
                 for (SeatEnum seatEnum : SeatEnum.values()) {
                     if (seatNumber == seatEnum.ordinal()) {
                         if (passenger.equals(PassengerEnum.ADULT.toString())) {
@@ -86,34 +158,30 @@ public class BookingServlet extends HttpServlet {
                             request.setAttribute("seatCost", seatCost);
                         }
                         request.setAttribute("passengerType", passenger);
-                        request.setAttribute("seatNumber", seatNumber);
+                        request.setAttribute("seatNumber", seatNumber + 1);
                         request.setAttribute("seatType", seatType);
                     }
-                    request.setAttribute("msg", msg);
-                    request.setAttribute("seats", Arrays.toString(seatManager.getSeats()));
+                    url = "/message.jsp";
+                    //return seatManager.getSeats();
 
                 }
-
-                url = "/message.jsp";
+            } else {
+                msg = "This seat is already booked.";
+                request.setAttribute("msg", msg);
+                url = "/booked.jsp";
             }
-            try (FileOutputStream fos = new FileOutputStream("C:\\Users\\user\\Documents\\seats.ser");
-                    ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(seatManager.getSeats());
-                oos.flush();
-                oos.close();
-            } catch (IOException e) {
-                e.getMessage();
-            }
+            isSeatBooked = true;
         } else {
-            msg = "The Flight is fully booked. Please choose another Flight.";
+            msg = "All the Economy seats have been used up.";
             request.setAttribute("msg", msg);
             url = "/booked.jsp";
         }
-    }
+        //url = "/indexRevB.jsp";
+        RequestDispatcher dispatcher
+                = getServletContext().getRequestDispatcher(url);
+        dispatcher.forward(request, response);
+        return seatManager.getSeats();
 
-    public void setSeatPK(int seatNumber, int aircraftId) {
-        seatPK.setSeatNumber(seatNumber);
-        seatPK.setAircraftId(aircraftId);
     }
 
     /**
@@ -135,127 +203,132 @@ public class BookingServlet extends HttpServlet {
         if (submit != null && submit.length() > 0) {
 
             switch (submit) {
-                case "seat00F":
+                case "seat01F":
                     seatNumber = 0;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
-                    break;
-                case "seat01F":
-                    seatNumber = 1;
-                    seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat02F":
-                    seatNumber = 2;
+                    seatNumber = 1;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat03F":
-                    seatNumber = 3;
+                    seatNumber = 2;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat04F":
-                    seatNumber = 4;
+                    seatNumber = 3;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat05F":
-                    seatNumber = 5;
+                    seatNumber = 4;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat06F":
-                    seatNumber = 6;
+                    seatNumber = 5;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat07F":
-                    seatNumber = 7;
+                    seatNumber = 6;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat08F":
-                    seatNumber = 8;
+                    seatNumber = 7;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat09F":
-                    seatNumber = 9;
+                    seatNumber = 8;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat10F":
-                    seatNumber = 10;
+                    seatNumber = 9;
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    this.chooseSeat(request, response);
                     break;
                 case "seat11F":
+                    seatNumber = 10;
+                    seatType = SeatTypeEnum.FIRSTCLASS;
+                    this.chooseSeat(request, response);
+                    break;
+                case "seat12F":
                     seatNumber = 11;
                     seatType = SeatTypeEnum.FIRSTCLASS;
                     chooseSeat(request, response);
                     break;
-                case "seat12E":
-                    seatNumber = 12;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat13E":
-                    seatNumber = 13;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat14E":
-                    seatNumber = 14;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat15E":
-                    seatNumber = 15;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat16E":
-                    seatNumber = 16;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat17E":
-                    seatNumber = 17;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat18E":
-                    seatNumber = 18;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat19E":
-                    seatNumber = 19;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat20E":
-                    seatNumber = 20;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat21E":
-                    seatNumber = 21;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat22E":
-                    seatNumber = 22;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
-                case "seat23E":
-                    seatNumber = 23;
-                    seatType = SeatTypeEnum.ECONOMY;
-                    chooseSeat(request, response);
-                    break;
+//                case "seat13E":
+//                    seatNumber = 12;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat14E":
+//                    seatNumber = 13;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat15E":
+//                    seatNumber = 14;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat16E":
+//                    seatNumber = 15;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat17E":
+//                    seatNumber = 16;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat18E":
+//                    seatNumber = 17;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat19E":
+//                    seatNumber = 18;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat20E":
+//                    seatNumber = 19;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat21E":
+//                    seatNumber = 20;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat22E":
+//                    seatNumber = 21;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat23E":
+//                    seatNumber = 22;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
+//                case "seat24E":
+//                    seatNumber = 23;
+//                    seatType = SeatTypeEnum.ECONOMY;
+//                    this.chooseSeat(request, response);
+//                    break;
                 case "seats":
+                    url = "/indexRevB.jsp";
+                    break;
+                case "Economy":
+                    seatType = SeatTypeEnum.ECONOMY;
+                    this.allocateEconomySeat(request, response, seatType);
                     url = "/indexRevB.jsp";
                     break;
                 default:
