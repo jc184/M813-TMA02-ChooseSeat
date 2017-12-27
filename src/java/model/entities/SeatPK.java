@@ -9,13 +9,13 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
 
 /**
  * Alba Airways application M813-TMA02-ChooseSeat
  * @author james chalmers Open University F6418079
  */
+
 @Embeddable
 public class SeatPK implements Serializable {
 
@@ -38,11 +38,6 @@ public class SeatPK implements Serializable {
         this.aircraftId = aircraftId;
     }
 
-    public SeatPK(SingularAttribute<Seat, SeatPK> seatPK) {
-        this.getSeatNumber();
-        this.getAircraftId();
-
-    }
 
     public int getSeatNumber() {
         return seatNumber;

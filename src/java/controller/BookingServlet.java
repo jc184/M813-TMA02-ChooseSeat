@@ -5,6 +5,7 @@
  */
 package controller;
 
+import database.SeatDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -17,6 +18,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.entities.Booking;
+import model.entities.Seat;
+import model.entities.SeatPK;
 import model.enums.PassengerEnum;
 import model.enums.SeatEnum;
 import model.enums.SeatTypeEnum;
@@ -35,16 +39,16 @@ public class BookingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     SeatManager seatManager;
-
+    SeatTypeEnum seatType;
+    
     private int seatNumber;
-    private int aircraftId = 101;
-    private SeatTypeEnum seatType;
+    private final int aircraftId = 101;
+    
     private String msg = "";
     private String url = "";
     private boolean isSeatBooked;
     private int economyCounter;
     private int firstClassCounter;
-
 
     /*
      * Creates a new instance of SeatManager
@@ -60,28 +64,17 @@ public class BookingServlet extends HttpServlet {
         String passenger = request.getParameter("Passenger");
         isSeatBooked = false;
         if (seatManager.getSeats()[seatNumber] == true) {
+//        if (seatManager.getAllSeatBookings()[seatNumber].equals(true)) {   
             msg = "This seat is already booked. Please choose another seat.";
             request.setAttribute("msg", msg);
             url = "/booked.jsp";
         } else {
-//            if (seatType == SeatTypeEnum.ECONOMY) {
-//
-//                if (economyCounter < 12) {
-//
-//                    this.assignSeat(seatNumber, seatType);
-//                    isSeatBooked = true;
-//                    economyCounter++;
-//                } else if (economyCounter >= 12) {
-//                    msg = "All the Economy seats have been used up.";
-//                    request.setAttribute("msg", msg);
-//                    url = "/booked.jsp";
-//                }
 
             if (seatType == SeatTypeEnum.FIRSTCLASS) {
 
                 if (firstClassCounter < 12) {
 
-                    this.assignSeat(seatNumber, seatType);
+                    this.assignSeat(seatNumber, seatType.toString());
                     isSeatBooked = true;
                     firstClassCounter++;
                 } else {
@@ -116,7 +109,6 @@ public class BookingServlet extends HttpServlet {
 
             url = "/message.jsp";
         }
-
 //        } else {
 //            msg = "The Flight is fully booked. Please choose another Flight.";
 //            request.setAttribute("msg", msg);
@@ -128,21 +120,42 @@ public class BookingServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    public boolean[] assignSeat(int seatNumber, SeatTypeEnum seatType) throws ClassNotFoundException {
-
+    public boolean[] assignSeat(int seatNumber, String seatType) throws ClassNotFoundException {
+        Seat seat = new Seat();
+        boolean isSeatBooked = false;
+        Booking bookingId = seat.getBookingId();
+        SeatPK seatPK = new SeatPK();
+        seatPK.getSeatNumber();
+        seatPK.getAircraftId();
         seatManager.getSeats()[seatNumber] = true;
+        SeatDB.addSeat(seatPK, seatType, bookingId, isSeatBooked);
         return seatManager.getSeats();
     }
 
-    public boolean[] allocateEconomySeat(HttpServletRequest request, HttpServletResponse response, SeatTypeEnum seatType) throws ServletException, IOException {
+    public boolean[] allocateEconomySeat(HttpServletRequest request, HttpServletResponse response, String seatType) throws ServletException, IOException, ClassNotFoundException {
         String passenger = request.getParameter("Passenger");
+        Seat seat = new Seat();
+        Booking bookingId = seat.getBookingId();
+        SeatPK seatPK = new SeatPK();
+        seatPK.getSeatNumber();
+        seatPK.getAircraftId();
+        
         if (economyCounter < 12) {
+//                    //If there are vacant seats, randomly select one etc...
             Random random = new Random();
             int economySeat = random.nextInt(23 - 12 + 1) + 12;
             seatNumber = economySeat;
+//                if (seatManager.getSeats()[seatNumber] == false) {
+//                    seatManager.getSeats()[seatNumber] = true;
+//                    economyCounter++;
+//                    if (economyCounter >= 12) {
+//                        break;
+//                    }
+//                }
             if (seatManager.getSeats()[seatNumber] == false) {
                 seatManager.getSeats()[seatNumber] = true;
                 economyCounter++;
+                SeatDB.addSeat(seatPK, seatType, bookingId, isSeatBooked);
                 msg = "Your Economy Class Seat Booking.";
                 request.setAttribute("msg", msg);
                 for (SeatEnum seatEnum : SeatEnum.values()) {
@@ -162,19 +175,16 @@ public class BookingServlet extends HttpServlet {
                         request.setAttribute("seatType", seatType);
                     }
                     url = "/message.jsp";
-                    //return seatManager.getSeats();
 
                 }
-            } else {
-                msg = "This seat is already booked.";
-                request.setAttribute("msg", msg);
-                url = "/booked.jsp";
             }
+
             isSeatBooked = true;
         } else {
             msg = "All the Economy seats have been used up.";
             request.setAttribute("msg", msg);
             url = "/booked.jsp";
+
         }
         //url = "/indexRevB.jsp";
         RequestDispatcher dispatcher
@@ -328,7 +338,7 @@ public class BookingServlet extends HttpServlet {
                     break;
                 case "Economy":
                     seatType = SeatTypeEnum.ECONOMY;
-                    this.allocateEconomySeat(request, response, seatType);
+                    this.allocateEconomySeat(request, response, seatType.toString());
                     url = "/indexRevB.jsp";
                     break;
                 default:

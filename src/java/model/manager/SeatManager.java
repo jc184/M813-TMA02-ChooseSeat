@@ -8,7 +8,6 @@ package model.manager;
 import java.io.Serializable;
 import java.util.Arrays;
 import model.enums.SeatEnum;
-import model.DAO.SeatDataStore;
 
 /**
  *
@@ -18,7 +17,7 @@ public class SeatManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    SeatDataStore seatStore;
+//    SeatDataStore seatStore;
 
     private final int NUMBER_OF_SEATS = 24;
     private boolean[] seats = new boolean[NUMBER_OF_SEATS];
@@ -29,7 +28,7 @@ public class SeatManager implements Serializable {
     private String url;
 
     public SeatManager() {
-        seatStore = new SeatDataStore();
+     
     }
 
     public int getNUMBER_OF_SEATS() {
@@ -38,9 +37,11 @@ public class SeatManager implements Serializable {
 
     public void setSeats(boolean[] seats) {
         this.seats = seats;
+
     }
 
     public boolean[] getSeats() {
+
         return seats;
     }
 
@@ -56,6 +57,18 @@ public class SeatManager implements Serializable {
         return isSeatBooked;
     }
 
+//    public void addSeatBooking(SeatPK seatPK, String seatType, Booking bookingId, boolean booked) throws ClassNotFoundException {
+//        try {
+//            for (SeatEnum seatEnum : SeatEnum.values()) {
+//                if (seatStore.getRecord(seatEnum.ordinal()) == null) {
+//                    Seat seat = new Seat(seatPK, seatType, bookingId, booked);
+//                    seatStore.createRecord(seat);
+//                }
+//            }
+//        } catch (ClassCastException cce) {
+//            cce.getMessage();
+//        }
+//    }
 //    public boolean[] assignSeat(int seatNumber, SeatTypeEnum seatType) throws ClassNotFoundException {
 //
 ////        if (seatType == SeatTypeEnum.ECONOMY) {
@@ -76,7 +89,6 @@ public class SeatManager implements Serializable {
 //        this.getSeats()[seatNumber] = true;
 //        return seats;
 //    }
-
 //    public boolean[] allocateEconomySeat(SeatTypeEnum seatType) {
 //
 //        if (economyCounter < 12) {
@@ -103,7 +115,7 @@ public class SeatManager implements Serializable {
         int seatNumber = 0;
         for (SeatEnum seatEnum : SeatEnum.values()) {
             if (seatNumber == seatEnum.ordinal()) {
-                setSeats(seats);
+                this.setSeats(seats);
                 Arrays.toString(seats);
             }
         }
@@ -113,6 +125,15 @@ public class SeatManager implements Serializable {
         for (SeatEnum seatEnum : SeatEnum.values()) {
             if (seatNumber == seatEnum.ordinal()) {
                 return seats[seatNumber];//WRONG. ALWAYS RETURNS FALSE
+            }
+        }
+        return false;
+    }
+
+    public boolean seatsContainsTrue() {
+        for (boolean seat : seats) {
+            if (seat) {
+                return true;
             }
         }
         return false;
