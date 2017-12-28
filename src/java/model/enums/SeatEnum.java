@@ -5,7 +5,7 @@
  */
 package model.enums;
 
-import model.manager.SeatManager;
+import database.SeatDB;
 
 /**
  * Alba Airways application M813-TMA02-ChooseSeat

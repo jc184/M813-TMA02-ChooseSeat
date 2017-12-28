@@ -36,10 +36,7 @@ import javax.validation.constraints.NotNull;
     , @NamedQuery(name = "Booking.findByBookingId", query = "SELECT b FROM Booking b WHERE b.bookingId = :bookingId")
     , @NamedQuery(name = "Booking.findByNoOfAdults", query = "SELECT b FROM Booking b WHERE b.noOfAdults = :noOfAdults")
     , @NamedQuery(name = "Booking.findByNoOfChildren", query = "SELECT b FROM Booking b WHERE b.noOfChildren = :noOfChildren")
-    , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")
-    , @NamedQuery(name = "Booking.findByAdultFare", query = "SELECT b FROM Booking b WHERE b.adultFare = :adultFare")
-    , @NamedQuery(name = "Booking.findByChildFare", query = "SELECT b FROM Booking b WHERE b.childFare = :childFare")
-    , @NamedQuery(name = "Booking.findByInfantFare", query = "SELECT b FROM Booking b WHERE b.infantFare = :infantFare")})
+    , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")})
 public class Booking implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,19 +57,6 @@ public class Booking implements Serializable {
     @NotNull
     @Column(name = "NoOfInfants")
     private int noOfInfants;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "AdultFare")
-    private BigDecimal adultFare;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ChildFare")
-    private BigDecimal childFare;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "InfantFare")
-    private BigDecimal infantFare;
     @JoinTable(name = "flightbooking", joinColumns = {
         @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")}, inverseJoinColumns = {
         @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId")})
@@ -80,8 +64,6 @@ public class Booking implements Serializable {
     private Collection<Flight> flightCollection;
     @OneToMany(mappedBy = "bookingBookingId")
     private Collection<Seat> seatCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingBookingId")
-    private Collection<Baggageitem> baggageitemCollection;
     @JoinColumn(name = "Customer_CustomerId", referencedColumnName = "CustomerId")
     @ManyToOne(optional = false)
     private Customer customerCustomerId;
@@ -95,14 +77,11 @@ public class Booking implements Serializable {
         this.bookingId = bookingId;
     }
 
-    public Booking(Integer bookingId, int noOfAdults, int noOfChildren, int noOfInfants, BigDecimal adultFare, BigDecimal childFare, BigDecimal infantFare) {
+    public Booking(Integer bookingId, int noOfAdults, int noOfChildren, int noOfInfants) {
         this.bookingId = bookingId;
         this.noOfAdults = noOfAdults;
         this.noOfChildren = noOfChildren;
         this.noOfInfants = noOfInfants;
-        this.adultFare = adultFare;
-        this.childFare = childFare;
-        this.infantFare = infantFare;
     }
 
     public Integer getBookingId() {
@@ -137,30 +116,6 @@ public class Booking implements Serializable {
         this.noOfInfants = noOfInfants;
     }
 
-    public BigDecimal getAdultFare() {
-        return adultFare;
-    }
-
-    public void setAdultFare(BigDecimal adultFare) {
-        this.adultFare = adultFare;
-    }
-
-    public BigDecimal getChildFare() {
-        return childFare;
-    }
-
-    public void setChildFare(BigDecimal childFare) {
-        this.childFare = childFare;
-    }
-
-    public BigDecimal getInfantFare() {
-        return infantFare;
-    }
-
-    public void setInfantFare(BigDecimal infantFare) {
-        this.infantFare = infantFare;
-    }
-
     public Collection<Flight> getFlightCollection() {
         return flightCollection;
     }
@@ -175,14 +130,6 @@ public class Booking implements Serializable {
 
     public void setSeatCollection(Collection<Seat> seatCollection) {
         this.seatCollection = seatCollection;
-    }
-
-    public Collection<Baggageitem> getBaggageitemCollection() {
-        return baggageitemCollection;
-    }
-
-    public void setBaggageitemCollection(Collection<Baggageitem> baggageitemCollection) {
-        this.baggageitemCollection = baggageitemCollection;
     }
 
     public Customer getCustomerCustomerId() {
@@ -225,5 +172,5 @@ public class Booking implements Serializable {
     public String toString() {
         return "entities.Booking[ bookingId=" + bookingId + " ]";
     }
-    
+
 }

@@ -5,7 +5,6 @@
  */
 package controller;
 
-import database.SeatDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ import entities.Seat;
 import model.enums.PassengerEnum;
 import model.enums.SeatEnum;
 import model.enums.SeatTypeEnum;
-import model.manager.SeatManager;
+import database.SeatDB;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -34,33 +33,30 @@ import net.sf.json.JSONObject;
  * @author james chalmers Open University F6418079
  */
 @WebServlet(name = "BookingServlet", urlPatterns = {"/BookingServlet"})
-public class BookingServlet extends HttpServlet {
+public class SeatingServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    SeatManager seatManager;
+    SeatDB seatDB;
     SeatTypeEnum seatType;
-    
-    private int seatNumber;
-    
-    private String msg = "";
-    private String url = "";
-    private int economyCounter;
-    private int firstClassCounter;
 
     /*
      * Creates a new instance of SeatManager
      */
     @Override
     public void init() throws ServletException {
-        seatManager = new SeatManager();
+        seatDB = new SeatDB();
     }
 
     public void chooseSeat(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
-
+        String msg = "";
+        String url = "";
+        int economyCounter;
+        int firstClassCounter = 0;
+        int seatNumber = 0;
 //        if (seatManager.areAllSeatsBooked(seatManager.getSeats())) {
         String passenger = request.getParameter("Passenger");
-        if (seatManager.getSeats()[seatNumber] == true) {
+        if (seatDB.getSeats()[seatNumber] == true) {
 //        if (seatManager.getAllSeatBookings()[seatNumber].equals(true)) {   
             msg = "This seat is already booked. Please choose another seat.";
             request.setAttribute("msg", msg);
@@ -99,7 +95,7 @@ public class BookingServlet extends HttpServlet {
                     request.setAttribute("seatType", seatType);
                 }
                 request.setAttribute("msg", msg);
-                request.setAttribute("seats", Arrays.toString(seatManager.getSeats()));
+                request.setAttribute("seats", Arrays.toString(seatDB.getSeats()));
 
             }
 
@@ -120,17 +116,23 @@ public class BookingServlet extends HttpServlet {
         Seat seat = new Seat();
         Booking booking = seat.getBooking();
         Flight flight = seat.getFlight();
-        seatManager.getSeats()[seatNumber] = true;
-        SeatDB.addSeat(seatNumber, seatType, booking, flight);
-        return seatManager.getSeats();
+        seatDB.getSeats()[seatNumber] = true;
+        Double seatPrice = null;
+        SeatDB.addSeat(seatNumber, seatPrice, booking, flight);
+        return seatDB.getSeats();
     }
 
     public boolean[] allocateEconomySeat(HttpServletRequest request, HttpServletResponse response, String seatType) throws ServletException, IOException, ClassNotFoundException {
         String passenger = request.getParameter("Passenger");
+        int economyCounter = 0;
+        int firstClassCounter;
+        String msg = "";
+        String url = "";
         Seat seat = new Seat();
         Booking booking = seat.getBooking();
         Flight flight = seat.getFlight();
-        
+        int seatNumber;
+
         if (economyCounter < 12) {
 //                    //If there are vacant seats, randomly select one etc...
             Random random = new Random();
@@ -143,10 +145,11 @@ public class BookingServlet extends HttpServlet {
 //                        break;
 //                    }
 //                }
-            if (seatManager.getSeats()[seatNumber] == false) {
-                seatManager.getSeats()[seatNumber] = true;
+            if (seatDB.getSeats()[seatNumber] == false) {
+                seatDB.getSeats()[seatNumber] = true;
                 economyCounter++;
-                SeatDB.addSeat(seatNumber, seatType, booking, flight);
+                Double seatPrice = null;
+                SeatDB.addSeat(seatNumber, seatPrice, booking, flight);
                 msg = "Your Economy Class Seat Booking.";
                 request.setAttribute("msg", msg);
                 for (SeatEnum seatEnum : SeatEnum.values()) {
@@ -180,7 +183,7 @@ public class BookingServlet extends HttpServlet {
         RequestDispatcher dispatcher
                 = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
-        return seatManager.getSeats();
+        return seatDB.getSeats();
 
     }
 
@@ -196,9 +199,9 @@ public class BookingServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
-
-        request.setAttribute("seats", Arrays.toString(seatManager.getSeats()));
-
+        int seatNumber;
+        request.setAttribute("seats", Arrays.toString(seatDB.getSeats()));
+        String url = "";
         String submit = request.getParameter("submit");
         if (submit != null && submit.length() > 0) {
 
@@ -358,7 +361,7 @@ public class BookingServlet extends HttpServlet {
             JSONArray array = new JSONArray();
             JSONObject member = new JSONObject();
 
-            member.put("arrayData", seatManager.getSeats());
+            member.put("arrayData", seatDB.getSeats());
             array.add(member);
 
             json.put("jsonArray", array);
@@ -384,7 +387,7 @@ public class BookingServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BookingServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SeatingServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

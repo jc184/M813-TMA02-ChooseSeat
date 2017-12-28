@@ -24,7 +24,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -46,21 +45,12 @@ public class Flight implements Serializable {
     @NotNull
     @Column(name = "LeaveDateTime")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date leaveDateTime;
+    private Date departureDateTime;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ArrivalDateTime")
+    @Column(name = "DepartureDateTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date arrivalDateTime;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "FlightStatus")
-    private String flightStatus;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GateNumber")
-    private int gateNumber;
     @JoinColumn(name = "Route_RouteId", referencedColumnName = "RouteId")
     @ManyToOne(optional = false)
     private Route routeRouteId;
@@ -74,12 +64,10 @@ public class Flight implements Serializable {
         this.flightId = flightId;
     }
 
-    public Flight(Integer flightId, Date leaveDateTime, Date arrivalDateTime, String flightStatus, int gateNumber) {
+    public Flight(Integer flightId, Date departureDateTime, Date arrivalDateTime) {
         this.flightId = flightId;
-        this.leaveDateTime = leaveDateTime;
+        this.departureDateTime = departureDateTime;
         this.arrivalDateTime = arrivalDateTime;
-        this.flightStatus = flightStatus;
-        this.gateNumber = gateNumber;
     }
 
     public Integer getFlightId() {
@@ -90,12 +78,12 @@ public class Flight implements Serializable {
         this.flightId = flightId;
     }
 
-    public Date getLeaveDateTime() {
-        return leaveDateTime;
+    public Date getDepartureDateTimeDateTime() {
+        return departureDateTime;
     }
 
-    public void setLeaveDateTime(Date leaveDateTime) {
-        this.leaveDateTime = leaveDateTime;
+    public void setDepartureDateTimeDateTime(Date departureDateTime) {
+        this.departureDateTime = departureDateTime;
     }
 
     public Date getArrivalDateTime() {
@@ -104,22 +92,6 @@ public class Flight implements Serializable {
 
     public void setArrivalDateTime(Date arrivalDateTime) {
         this.arrivalDateTime = arrivalDateTime;
-    }
-
-    public String getFlightStatus() {
-        return flightStatus;
-    }
-
-    public void setFlightStatus(String flightStatus) {
-        this.flightStatus = flightStatus;
-    }
-
-    public int getGateNumber() {
-        return gateNumber;
-    }
-
-    public void setGateNumber(int gateNumber) {
-        this.gateNumber = gateNumber;
     }
 
     public Route getRouteRouteId() {

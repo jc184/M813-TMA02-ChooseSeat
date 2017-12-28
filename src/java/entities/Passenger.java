@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,7 +28,11 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "passenger")
 @NamedQueries({
-    @NamedQuery(name = "Passenger.findAll", query = "SELECT p FROM Passenger p")})
+    @NamedQuery(name = "Passenger.findAll", query = "SELECT p FROM Passenger p")
+    , @NamedQuery(name = "Passenger.findByPassengerId", query = "SELECT p FROM Passenger p WHERE p.passengerId = :passengerId")
+    , @NamedQuery(name = "Passenger.findByPassengerName", query = "SELECT p FROM Passenger p WHERE p.passengerName = :passengerName")
+    , @NamedQuery(name = "Passenger.findByBaggageItemId", query = "SELECT p FROM Passenger p WHERE p.baggageItemId = :baggageItemId")
+    , @NamedQuery(name = "Passenger.findByBaggageItemWeightKg", query = "SELECT p FROM Passenger p WHERE p.baggageItemWeightKg = :baggageItemWeightKg")})
 public class Passenger implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,15 +48,20 @@ public class Passenger implements Serializable {
     private String passengerName;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "PassengerType")
-    private String passengerType;
-    @JoinColumn(name = "BaggageItem_BaggageItemId", referencedColumnName = "BaggageItemId")
+    @Column(name = "BaggageItemId")
+    private int baggageItemId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "BaggageItemWeightKg")
+    private int baggageItemWeightKg;
+    @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")
     @ManyToOne(optional = false)
-    private Baggageitem baggageItemBaggageItemId;
-    @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId")
+    private Booking bookingBookingId;
+    @JoinColumns({
+        @JoinColumn(name = "Seat_SeatNo", referencedColumnName = "SeatNo")
+        , @JoinColumn(name = "Seat_Flight_FlightId", referencedColumnName = "Flight_FlightId")})
     @ManyToOne(optional = false)
-    private Flight flightFlightId;
+    private Seat seat;
 
     public Passenger() {
     }
@@ -60,10 +70,11 @@ public class Passenger implements Serializable {
         this.passengerId = passengerId;
     }
 
-    public Passenger(Integer passengerId, String passengerName, String passengerType) {
+    public Passenger(Integer passengerId, String passengerName, int baggageItemId, int baggageItemWeightKg) {
         this.passengerId = passengerId;
         this.passengerName = passengerName;
-        this.passengerType = passengerType;
+        this.baggageItemId = baggageItemId;
+        this.baggageItemWeightKg = baggageItemWeightKg;
     }
 
     public Integer getPassengerId() {
@@ -82,28 +93,36 @@ public class Passenger implements Serializable {
         this.passengerName = passengerName;
     }
 
-    public String getPassengerType() {
-        return passengerType;
+    public int getBaggageItemId() {
+        return baggageItemId;
     }
 
-    public void setPassengerType(String passengerType) {
-        this.passengerType = passengerType;
+    public void setBaggageItemId(int baggageItemId) {
+        this.baggageItemId = baggageItemId;
     }
 
-    public Baggageitem getBaggageItemBaggageItemId() {
-        return baggageItemBaggageItemId;
+    public int getBaggageItemWeightKg() {
+        return baggageItemWeightKg;
     }
 
-    public void setBaggageItemBaggageItemId(Baggageitem baggageItemBaggageItemId) {
-        this.baggageItemBaggageItemId = baggageItemBaggageItemId;
+    public void setBaggageItemWeightKg(int baggageItemWeightKg) {
+        this.baggageItemWeightKg = baggageItemWeightKg;
     }
 
-    public Flight getFlightFlightId() {
-        return flightFlightId;
+    public Booking getBookingBookingId() {
+        return bookingBookingId;
     }
 
-    public void setFlightFlightId(Flight flightFlightId) {
-        this.flightFlightId = flightFlightId;
+    public void setBookingBookingId(Booking bookingBookingId) {
+        this.bookingBookingId = bookingBookingId;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
     @Override

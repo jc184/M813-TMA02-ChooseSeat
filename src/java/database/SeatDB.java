@@ -12,6 +12,9 @@ import javax.persistence.TypedQuery;
 import entities.Booking;
 import entities.Flight;
 import entities.Seat;
+import entities.SeatPK;
+import java.util.Arrays;
+import model.enums.SeatEnum;
 
 /**
  *
@@ -19,11 +22,73 @@ import entities.Seat;
  */
 public class SeatDB {
 
-    public static Seat selectSeat(int SeatNo) {
+    private final int NUMBER_OF_SEATS = 24;
+    private boolean[] seats = new boolean[NUMBER_OF_SEATS];
+    private int firstClassCounter;//counter for first class
+    private int economyCounter;//counter for economy class
+    private boolean isSeatBooked;
+
+    public SeatDB() {
+
+    }
+
+    public int getNUMBER_OF_SEATS() {
+        return NUMBER_OF_SEATS;
+    }
+
+    public void setSeats(boolean[] seats) {
+        this.seats = seats;
+    }
+
+    public boolean[] getSeats() {
+        return seats;
+    }
+
+    public int getFirstClassCounter() {
+        return firstClassCounter;
+    }
+
+    public int getEconomyCounter() {
+        return economyCounter;
+    }
+
+    public boolean isIsSeatBooked() {
+        return isSeatBooked;
+    }
+
+    public void saveSeatingLayout(boolean[] seats) {
+        int seatNumber = 0;
+        for (SeatEnum seatEnum : SeatEnum.values()) {
+            if (seatNumber == seatEnum.ordinal()) {
+                this.setSeats(seats);
+                Arrays.toString(seats);
+            }
+        }
+    }
+
+    public boolean isSeatBooked(int seatNumber) {
+        for (SeatEnum seatEnum : SeatEnum.values()) {
+            if (seatNumber == seatEnum.ordinal()) {
+                return seats[seatNumber];//WRONG. ALWAYS RETURNS FALSE
+            }
+        }
+        return false;
+    }
+
+    public boolean seatsContainsTrue() {
+        for (boolean seat : seats) {
+            if (seat) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Seat selectSeat(SeatPK seatPK) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
-        String qString = "SELECT s FROM seat s WHERE s.seatNumber = :seatNumber";
+        String qString = "SELECT s FROM seat s WHERE (s.seatNumber = :seatNumber) AND (s.flightId = :flightId)";
         TypedQuery<Seat> tq = em.createQuery(qString, Seat.class);
-        tq.setParameter("SeatNo", SeatNo);
+        tq.setParameter("SeatPK", seatPK);
         Seat result = null;
         try {
             result = tq.getSingleResult();
@@ -35,9 +100,9 @@ public class SeatDB {
         return (Seat) result;
     }
 
-    public static Seat selectSeatById(int SeatNo) {
+    public static Seat selectSeatById(SeatPK seatPK) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
-        return em.find(Seat.class, SeatNo);
+        return em.find(Seat.class, seatPK);
     }
 
     public static List<Seat> selectSeats() {
@@ -55,16 +120,17 @@ public class SeatDB {
         return results;
     }
 
-    public static Seat addSeat(int seatNo, String seatType, Booking bookingId, Flight flightId) {
+    public static Seat addSeat(int seatNo, Double seatPrice, Booking bookingId, Flight flightId) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
         Seat seat = new Seat();
-        int seatNumber = 0;
+        SeatPK seatPK = new SeatPK();
 
-        seat.setSeatNo(seatNo);
-        seat.setSeatType(seatType);
-
+        seat.setSeatPK(seatPK);
+        seat.setSeatPrice(seatPrice);
+        seat.setBooking(bookingId);
 
         em.persist(seat);
         return seat;
     }
+
 }

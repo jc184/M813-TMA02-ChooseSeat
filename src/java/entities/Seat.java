@@ -6,12 +6,13 @@
 package entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -19,7 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -29,56 +29,58 @@ import javax.validation.constraints.Size;
 @Table(name = "seat")
 @NamedQueries({
     @NamedQuery(name = "Seat.findAll", query = "SELECT s FROM Seat s")
-    , @NamedQuery(name = "Seat.findBySeatNo", query = "SELECT s FROM Seat s WHERE s.seatNo = :seatNo")
-    , @NamedQuery(name = "Seat.findBySeatType", query = "SELECT s FROM Seat s WHERE s.seatType = :seatType")})
+    , @NamedQuery(name = "Seat.findBySeatNo", query = "SELECT s FROM Seat s WHERE s.seatPK.seatNo = :seatNo")
+    , @NamedQuery(name = "Seat.findByFlightFlightId", query = "SELECT s FROM Seat s WHERE s.seatPK.flightFlightId = :flightFlightId")
+    , @NamedQuery(name = "Seat.findBySeatPrice", query = "SELECT s FROM Seat s WHERE s.seatPrice = :seatPrice")})
 public class Seat implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    @EmbeddedId
+    protected SeatPK seatPK;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "SeatNo")
-    private Integer seatNo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "SeatType")
-    private String seatType;
+    @Column(name = "SeatPrice")
+    private Double seatPrice;
     @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Booking booking;
-    @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId")
+    @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Flight flight;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatSeatNo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seat")
     private Collection<Passenger> passengerCollection;
 
     public Seat() {
     }
 
-    public Seat(Integer seatNo) {
-        this.seatNo = seatNo;
+    public Seat(entities.SeatPK seatPK) {
+        this.seatPK = seatPK;
     }
 
-    public Seat(Integer seatNo, String seatType) {
-        this.seatNo = seatNo;
-        this.seatType = seatType;
+    public Seat(SeatPK seatPK, double seatPrice) {
+        this.seatPK = seatPK;
+        this.seatPrice = seatPrice;
     }
 
-    public Integer getSeatNo() {
-        return seatNo;
+    public Seat(int seatNo, int flightId) {
+        this.seatPK = new SeatPK(seatNo, flightId);
     }
 
-    public void setSeatNo(Integer seatNo) {
-        this.seatNo = seatNo;
+    public SeatPK getSeatPK() {
+        return seatPK;
     }
 
-    public String getSeatType() {
-        return seatType;
+    public void setSeatPK(SeatPK seatPK) {
+        this.seatPK = seatPK;
     }
 
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
+    public Double getSeatPrice() {
+        return seatPrice;
+    }
+
+    public void setSeatPrice(Double seatPrice) {
+        this.seatPrice = seatPrice;
     }
 
     public Booking getBooking() {
@@ -108,7 +110,7 @@ public class Seat implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (seatNo != null ? seatNo.hashCode() : 0);
+        hash += (seatPK != null ? seatPK.hashCode() : 0);
         return hash;
     }
 
@@ -119,7 +121,7 @@ public class Seat implements Serializable {
             return false;
         }
         Seat other = (Seat) object;
-        if ((this.seatNo == null && other.seatNo != null) || (this.seatNo != null && !this.seatNo.equals(other.seatNo))) {
+        if ((this.seatPK == null && other.seatPK != null) || (this.seatPK != null && !this.seatPK.equals(other.seatPK))) {
             return false;
         }
         return true;
@@ -127,7 +129,7 @@ public class Seat implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Seat[ seatNo=" + seatNo + " ]";
+        return "entities.Seat[ seatPK=" + seatPK + " ]";
     }
     
 }
