@@ -3,51 +3,43 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entities;
+package entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Alba Airways application M813-TMA02-ChooseSeat
- * @author james chalmers Open University F6418079
+ *
+ * @author james
  */
 @Entity
 @Table(name = "booking")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Booking.findAll", query = "SELECT b FROM Booking b")
     , @NamedQuery(name = "Booking.findByBookingId", query = "SELECT b FROM Booking b WHERE b.bookingId = :bookingId")
     , @NamedQuery(name = "Booking.findByNoOfAdults", query = "SELECT b FROM Booking b WHERE b.noOfAdults = :noOfAdults")
     , @NamedQuery(name = "Booking.findByNoOfChildren", query = "SELECT b FROM Booking b WHERE b.noOfChildren = :noOfChildren")
     , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")
-    , @NamedQuery(name = "Booking.findByTicketType", query = "SELECT b FROM Booking b WHERE b.ticketType = :ticketType")
-    , @NamedQuery(name = "Booking.findByTotalCost", query = "SELECT b FROM Booking b WHERE b.totalCost = :totalCost")
-    , @NamedQuery(name = "Booking.findBySeatType", query = "SELECT b FROM Booking b WHERE b.seatType = :seatType")
-    , @NamedQuery(name = "Booking.findByOutboundRouteID", query = "SELECT b FROM Booking b WHERE b.outboundRouteID = :outboundRouteID")
-    , @NamedQuery(name = "Booking.findByOutboundDate", query = "SELECT b FROM Booking b WHERE b.outboundDate = :outboundDate")
-    , @NamedQuery(name = "Booking.findByReturnRouteID", query = "SELECT b FROM Booking b WHERE b.returnRouteID = :returnRouteID")
-    , @NamedQuery(name = "Booking.findByReturnDate", query = "SELECT b FROM Booking b WHERE b.returnDate = :returnDate")})
+    , @NamedQuery(name = "Booking.findByAdultFare", query = "SELECT b FROM Booking b WHERE b.adultFare = :adultFare")
+    , @NamedQuery(name = "Booking.findByChildFare", query = "SELECT b FROM Booking b WHERE b.childFare = :childFare")
+    , @NamedQuery(name = "Booking.findByInfantFare", query = "SELECT b FROM Booking b WHERE b.infantFare = :infantFare")})
 public class Booking implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,38 +60,33 @@ public class Booking implements Serializable {
     @NotNull
     @Column(name = "NoOfInfants")
     private int noOfInfants;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
-    @Column(name = "TicketType")
-    private String ticketType;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "TotalCost")
-    private BigDecimal totalCost;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 12)
-    @Column(name = "SeatType")
-    private String seatType;
+    @Column(name = "AdultFare")
+    private BigDecimal adultFare;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "OutboundRouteID")
-    private int outboundRouteID;
+    @Column(name = "ChildFare")
+    private BigDecimal childFare;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "OutboundDate")
-    @Temporal(TemporalType.DATE)
-    private Date outboundDate;
-    @Column(name = "ReturnRouteID")
-    private Integer returnRouteID;
-    @Column(name = "ReturnDate")
-    @Temporal(TemporalType.DATE)
-    private Date returnDate;
+    @Column(name = "InfantFare")
+    private BigDecimal infantFare;
+    @JoinTable(name = "flightbooking", joinColumns = {
+        @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")}, inverseJoinColumns = {
+        @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId")})
+    @ManyToMany
+    private Collection<Flight> flightCollection;
     @OneToMany(mappedBy = "bookingBookingId")
     private Collection<Seat> seatCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingBookingId")
+    private Collection<Baggageitem> baggageitemCollection;
     @JoinColumn(name = "Customer_CustomerId", referencedColumnName = "CustomerId")
     @ManyToOne(optional = false)
     private Customer customerCustomerId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingBookingId")
+    private Collection<Passenger> passengerCollection;
 
     public Booking() {
     }
@@ -108,15 +95,14 @@ public class Booking implements Serializable {
         this.bookingId = bookingId;
     }
 
-    public Booking(Integer bookingId, int noOfAdults, int noOfChildren, int noOfInfants, String ticketType, String seatType, int outboundRouteID, Date outboundDate) {
+    public Booking(Integer bookingId, int noOfAdults, int noOfChildren, int noOfInfants, BigDecimal adultFare, BigDecimal childFare, BigDecimal infantFare) {
         this.bookingId = bookingId;
         this.noOfAdults = noOfAdults;
         this.noOfChildren = noOfChildren;
         this.noOfInfants = noOfInfants;
-        this.ticketType = ticketType;
-        this.seatType = seatType;
-        this.outboundRouteID = outboundRouteID;
-        this.outboundDate = outboundDate;
+        this.adultFare = adultFare;
+        this.childFare = childFare;
+        this.infantFare = infantFare;
     }
 
     public Integer getBookingId() {
@@ -151,63 +137,38 @@ public class Booking implements Serializable {
         this.noOfInfants = noOfInfants;
     }
 
-    public String getTicketType() {
-        return ticketType;
+    public BigDecimal getAdultFare() {
+        return adultFare;
     }
 
-    public void setTicketType(String ticketType) {
-        this.ticketType = ticketType;
+    public void setAdultFare(BigDecimal adultFare) {
+        this.adultFare = adultFare;
     }
 
-    public BigDecimal getTotalCost() {
-        return totalCost;
+    public BigDecimal getChildFare() {
+        return childFare;
     }
 
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
+    public void setChildFare(BigDecimal childFare) {
+        this.childFare = childFare;
     }
 
-    public String getSeatType() {
-        return seatType;
+    public BigDecimal getInfantFare() {
+        return infantFare;
     }
 
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
+    public void setInfantFare(BigDecimal infantFare) {
+        this.infantFare = infantFare;
     }
 
-    public int getOutboundRouteID() {
-        return outboundRouteID;
+    public Collection<Flight> getFlightCollection() {
+        return flightCollection;
     }
 
-    public void setOutboundRouteID(int outboundRouteID) {
-        this.outboundRouteID = outboundRouteID;
+    public void setFlightCollection(Collection<Flight> flightCollection) {
+        this.flightCollection = flightCollection;
     }
 
-    public Date getOutboundDate() {
-        return outboundDate;
-    }
-
-    public void setOutboundDate(Date outboundDate) {
-        this.outboundDate = outboundDate;
-    }
-
-    public Integer getReturnRouteID() {
-        return returnRouteID;
-    }
-
-    public void setReturnRouteID(Integer returnRouteID) {
-        this.returnRouteID = returnRouteID;
-    }
-
-    public Date getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    @XmlTransient
     public Collection<Seat> getSeatCollection() {
         return seatCollection;
     }
@@ -216,12 +177,28 @@ public class Booking implements Serializable {
         this.seatCollection = seatCollection;
     }
 
+    public Collection<Baggageitem> getBaggageitemCollection() {
+        return baggageitemCollection;
+    }
+
+    public void setBaggageitemCollection(Collection<Baggageitem> baggageitemCollection) {
+        this.baggageitemCollection = baggageitemCollection;
+    }
+
     public Customer getCustomerCustomerId() {
         return customerCustomerId;
     }
 
     public void setCustomerCustomerId(Customer customerCustomerId) {
         this.customerCustomerId = customerCustomerId;
+    }
+
+    public Collection<Passenger> getPassengerCollection() {
+        return passengerCollection;
+    }
+
+    public void setPassengerCollection(Collection<Passenger> passengerCollection) {
+        this.passengerCollection = passengerCollection;
     }
 
     @Override

@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entities;
+package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -23,14 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "aircraft")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aircraft.findAll", query = "SELECT a FROM Aircraft a")
     , @NamedQuery(name = "Aircraft.findByAircraftId", query = "SELECT a FROM Aircraft a WHERE a.aircraftId = :aircraftId")
     , @NamedQuery(name = "Aircraft.findByAircraftModel", query = "SELECT a FROM Aircraft a WHERE a.aircraftModel = :aircraftModel")
     , @NamedQuery(name = "Aircraft.findBySeatingCapacity", query = "SELECT a FROM Aircraft a WHERE a.seatingCapacity = :seatingCapacity")
-    , @NamedQuery(name = "Aircraft.findByLuggageCapacity", query = "SELECT a FROM Aircraft a WHERE a.luggageCapacity = :luggageCapacity")
-    , @NamedQuery(name = "Aircraft.findByAircraftStatus", query = "SELECT a FROM Aircraft a WHERE a.aircraftStatus = :aircraftStatus")})
+    , @NamedQuery(name = "Aircraft.findByLuggageCapacity", query = "SELECT a FROM Aircraft a WHERE a.luggageCapacity = :luggageCapacity")})
 public class Aircraft implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,11 +52,8 @@ public class Aircraft implements Serializable {
     @NotNull
     @Column(name = "LuggageCapacity")
     private int luggageCapacity;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "AircraftStatus")
-    private String aircraftStatus;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "aircraftAircraftId")
+    private Collection<Flight> flightCollection;
 
     public Aircraft() {
     }
@@ -65,12 +62,11 @@ public class Aircraft implements Serializable {
         this.aircraftId = aircraftId;
     }
 
-    public Aircraft(Integer aircraftId, String aircraftModel, int seatingCapacity, int luggageCapacity, String aircraftStatus) {
+    public Aircraft(Integer aircraftId, String aircraftModel, int seatingCapacity, int luggageCapacity) {
         this.aircraftId = aircraftId;
         this.aircraftModel = aircraftModel;
         this.seatingCapacity = seatingCapacity;
         this.luggageCapacity = luggageCapacity;
-        this.aircraftStatus = aircraftStatus;
     }
 
     public Integer getAircraftId() {
@@ -105,12 +101,12 @@ public class Aircraft implements Serializable {
         this.luggageCapacity = luggageCapacity;
     }
 
-    public String getAircraftStatus() {
-        return aircraftStatus;
+    public Collection<Flight> getFlightCollection() {
+        return flightCollection;
     }
 
-    public void setAircraftStatus(String aircraftStatus) {
-        this.aircraftStatus = aircraftStatus;
+    public void setFlightCollection(Collection<Flight> flightCollection) {
+        this.flightCollection = flightCollection;
     }
 
     @Override

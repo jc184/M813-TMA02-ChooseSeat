@@ -18,9 +18,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.entities.Booking;
-import model.entities.Seat;
-import model.entities.SeatPK;
+import entities.Booking;
+import entities.Flight;
+import entities.Seat;
 import model.enums.PassengerEnum;
 import model.enums.SeatEnum;
 import model.enums.SeatTypeEnum;
@@ -42,11 +42,9 @@ public class BookingServlet extends HttpServlet {
     SeatTypeEnum seatType;
     
     private int seatNumber;
-    private final int aircraftId = 101;
     
     private String msg = "";
     private String url = "";
-    private boolean isSeatBooked;
     private int economyCounter;
     private int firstClassCounter;
 
@@ -62,7 +60,6 @@ public class BookingServlet extends HttpServlet {
 
 //        if (seatManager.areAllSeatsBooked(seatManager.getSeats())) {
         String passenger = request.getParameter("Passenger");
-        isSeatBooked = false;
         if (seatManager.getSeats()[seatNumber] == true) {
 //        if (seatManager.getAllSeatBookings()[seatNumber].equals(true)) {   
             msg = "This seat is already booked. Please choose another seat.";
@@ -75,7 +72,6 @@ public class BookingServlet extends HttpServlet {
                 if (firstClassCounter < 12) {
 
                     this.assignSeat(seatNumber, seatType.toString());
-                    isSeatBooked = true;
                     firstClassCounter++;
                 } else {
                     msg = "All the Economy seats have been used up.";
@@ -122,23 +118,18 @@ public class BookingServlet extends HttpServlet {
 
     public boolean[] assignSeat(int seatNumber, String seatType) throws ClassNotFoundException {
         Seat seat = new Seat();
-        boolean isSeatBooked = false;
-        Booking bookingId = seat.getBookingId();
-        SeatPK seatPK = new SeatPK();
-        seatPK.getSeatNumber();
-        seatPK.getAircraftId();
+        Booking booking = seat.getBooking();
+        Flight flight = seat.getFlight();
         seatManager.getSeats()[seatNumber] = true;
-        SeatDB.addSeat(seatPK, seatType, bookingId, isSeatBooked);
+        SeatDB.addSeat(seatNumber, seatType, booking, flight);
         return seatManager.getSeats();
     }
 
     public boolean[] allocateEconomySeat(HttpServletRequest request, HttpServletResponse response, String seatType) throws ServletException, IOException, ClassNotFoundException {
         String passenger = request.getParameter("Passenger");
         Seat seat = new Seat();
-        Booking bookingId = seat.getBookingId();
-        SeatPK seatPK = new SeatPK();
-        seatPK.getSeatNumber();
-        seatPK.getAircraftId();
+        Booking booking = seat.getBooking();
+        Flight flight = seat.getFlight();
         
         if (economyCounter < 12) {
 //                    //If there are vacant seats, randomly select one etc...
@@ -155,7 +146,7 @@ public class BookingServlet extends HttpServlet {
             if (seatManager.getSeats()[seatNumber] == false) {
                 seatManager.getSeats()[seatNumber] = true;
                 economyCounter++;
-                SeatDB.addSeat(seatPK, seatType, bookingId, isSeatBooked);
+                SeatDB.addSeat(seatNumber, seatType, booking, flight);
                 msg = "Your Economy Class Seat Booking.";
                 request.setAttribute("msg", msg);
                 for (SeatEnum seatEnum : SeatEnum.values()) {
@@ -179,7 +170,6 @@ public class BookingServlet extends HttpServlet {
                 }
             }
 
-            isSeatBooked = true;
         } else {
             msg = "All the Economy seats have been used up.";
             request.setAttribute("msg", msg);

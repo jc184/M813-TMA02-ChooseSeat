@@ -9,9 +9,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import model.entities.Booking;
-import model.entities.Seat;
-import model.entities.SeatPK;
+import entities.Booking;
+import entities.Flight;
+import entities.Seat;
 
 /**
  *
@@ -19,11 +19,11 @@ import model.entities.SeatPK;
  */
 public class SeatDB {
 
-    public static Seat selectSeat(SeatPK seatPK) {
+    public static Seat selectSeat(int SeatNo) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
-        String qString = "SELECT s FROM seat s WHERE (s.seatNumber = :seatNumber) AND (s.aircraftId = :aircraftId)";
+        String qString = "SELECT s FROM seat s WHERE s.seatNumber = :seatNumber";
         TypedQuery<Seat> tq = em.createQuery(qString, Seat.class);
-        tq.setParameter("seatPK", seatPK);
+        tq.setParameter("SeatNo", SeatNo);
         Seat result = null;
         try {
             result = tq.getSingleResult();
@@ -35,14 +35,14 @@ public class SeatDB {
         return (Seat) result;
     }
 
-    public static Seat selectSeatById(SeatPK seatPK) {
+    public static Seat selectSeatById(int SeatNo) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
-        return em.find(Seat.class, seatPK);
+        return em.find(Seat.class, SeatNo);
     }
 
     public static List<Seat> selectSeats() {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
-        String qString = "SELECT op from ordered_product op";
+        String qString = "SELECT s from Seat s";
         TypedQuery<Seat> tq = em.createQuery(qString, Seat.class);
         List<Seat> results = null;
         try {
@@ -55,18 +55,14 @@ public class SeatDB {
         return results;
     }
 
-    public static Seat addSeat(SeatPK seatPK, String seatType, Booking bookingId, boolean booked) {
+    public static Seat addSeat(int seatNo, String seatType, Booking bookingId, Flight flightId) {
         EntityManager em = DBUtil.getEntityManagerFactory().createEntityManager();
         Seat seat = new Seat();
         int seatNumber = 0;
-        int aircraftId = 0;
-        
-        seatPK.setSeatNumber(seatNumber);
-        seatPK.setAircraftId(aircraftId);
 
+        seat.setSeatNo(seatNo);
         seat.setSeatType(seatType);
-        seat.setBookingId(bookingId);
-        seat.setBooked(booked);
+
 
         em.persist(seat);
         return seat;

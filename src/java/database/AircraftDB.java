@@ -5,7 +5,7 @@
  */
 package database;
 
-import model.entities.Aircraft;
+import entities.Aircraft;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
