@@ -6,7 +6,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,15 +28,19 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "route")
 @NamedQueries({
-    @NamedQuery(name = "Route.findAll", query = "SELECT r FROM Route r")})
+    @NamedQuery(name = "Route.findAll", query = "SELECT r FROM Route r")
+    , @NamedQuery(name = "Route.findById", query = "SELECT r FROM Route r WHERE r.id = :id")
+    , @NamedQuery(name = "Route.findByRouteName", query = "SELECT r FROM Route r WHERE r.routeName = :routeName")
+    , @NamedQuery(name = "Route.findByAirportFrom", query = "SELECT r FROM Route r WHERE r.airportFrom = :airportFrom")
+    , @NamedQuery(name = "Route.findByAirportTo", query = "SELECT r FROM Route r WHERE r.airportTo = :airportTo")})
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "RouteId")
-    private Integer routeId;
+    @Column(name = "Id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -52,29 +56,29 @@ public class Route implements Serializable {
     @Size(min = 1, max = 3)
     @Column(name = "AirportTo")
     private String airportTo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeRouteId")
-    private List<Flight> flightList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeId")
+    private Collection<Flight> flightCollection;
 
     public Route() {
     }
 
-    public Route(Integer routeId) {
-        this.routeId = routeId;
+    public Route(Integer id) {
+        this.id = id;
     }
 
-    public Route(Integer routeId, String routeName, String airportFrom, String airportTo) {
-        this.routeId = routeId;
+    public Route(Integer id, String routeName, String airportFrom, String airportTo) {
+        this.id = id;
         this.routeName = routeName;
         this.airportFrom = airportFrom;
         this.airportTo = airportTo;
     }
 
-    public Integer getRouteId() {
-        return routeId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRouteId(Integer routeId) {
-        this.routeId = routeId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getRouteName() {
@@ -101,18 +105,18 @@ public class Route implements Serializable {
         this.airportTo = airportTo;
     }
 
-    public List<Flight> getFlightList() {
-        return flightList;
+    public Collection<Flight> getFlightCollection() {
+        return flightCollection;
     }
 
-    public void setFlightList(List<Flight> flightList) {
-        this.flightList = flightList;
+    public void setFlightCollection(Collection<Flight> flightCollection) {
+        this.flightCollection = flightCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (routeId != null ? routeId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -123,7 +127,7 @@ public class Route implements Serializable {
             return false;
         }
         Route other = (Route) object;
-        if ((this.routeId == null && other.routeId != null) || (this.routeId != null && !this.routeId.equals(other.routeId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -131,7 +135,7 @@ public class Route implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Route[ routeId=" + routeId + " ]";
+        return "entities.Route[ id=" + id + " ]";
     }
     
 }

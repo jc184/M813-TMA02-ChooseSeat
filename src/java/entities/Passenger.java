@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 @Table(name = "passenger")
 @NamedQueries({
     @NamedQuery(name = "Passenger.findAll", query = "SELECT p FROM Passenger p")
-    , @NamedQuery(name = "Passenger.findByPassengerId", query = "SELECT p FROM Passenger p WHERE p.passengerId = :passengerId")
+    , @NamedQuery(name = "Passenger.findById", query = "SELECT p FROM Passenger p WHERE p.id = :id")
     , @NamedQuery(name = "Passenger.findByPassengerName", query = "SELECT p FROM Passenger p WHERE p.passengerName = :passengerName")
     , @NamedQuery(name = "Passenger.findByBaggageItemId", query = "SELECT p FROM Passenger p WHERE p.baggageItemId = :baggageItemId")
     , @NamedQuery(name = "Passenger.findByBaggageItemWeightKg", query = "SELECT p FROM Passenger p WHERE p.baggageItemWeightKg = :baggageItemWeightKg")})
@@ -39,8 +39,8 @@ public class Passenger implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "PassengerId")
-    private Integer passengerId;
+    @Column(name = "Id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -54,35 +54,35 @@ public class Passenger implements Serializable {
     @NotNull
     @Column(name = "BaggageItemWeightKg")
     private int baggageItemWeightKg;
-    @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")
+    @JoinColumn(name = "Booking_Id", referencedColumnName = "Id")
     @ManyToOne(optional = false)
-    private Booking bookingBookingId;
+    private Booking bookingId;
     @JoinColumns({
         @JoinColumn(name = "Seat_SeatNo", referencedColumnName = "SeatNo")
-        , @JoinColumn(name = "Seat_Flight_FlightId", referencedColumnName = "Flight_FlightId")})
+        , @JoinColumn(name = "Seat_Flight_Id", referencedColumnName = "Flight_Id")})
     @ManyToOne(optional = false)
     private Seat seat;
 
     public Passenger() {
     }
 
-    public Passenger(Integer passengerId) {
-        this.passengerId = passengerId;
+    public Passenger(Integer id) {
+        this.id = id;
     }
 
-    public Passenger(Integer passengerId, String passengerName, int baggageItemId, int baggageItemWeightKg) {
-        this.passengerId = passengerId;
+    public Passenger(Integer id, String passengerName, int baggageItemId, int baggageItemWeightKg) {
+        this.id = id;
         this.passengerName = passengerName;
         this.baggageItemId = baggageItemId;
         this.baggageItemWeightKg = baggageItemWeightKg;
     }
 
-    public Integer getPassengerId() {
-        return passengerId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPassengerId(Integer passengerId) {
-        this.passengerId = passengerId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getPassengerName() {
@@ -109,12 +109,12 @@ public class Passenger implements Serializable {
         this.baggageItemWeightKg = baggageItemWeightKg;
     }
 
-    public Booking getBookingBookingId() {
-        return bookingBookingId;
+    public Booking getBookingId() {
+        return bookingId;
     }
 
-    public void setBookingBookingId(Booking bookingBookingId) {
-        this.bookingBookingId = bookingBookingId;
+    public void setBookingId(Booking bookingId) {
+        this.bookingId = bookingId;
     }
 
     public Seat getSeat() {
@@ -128,7 +128,7 @@ public class Passenger implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (passengerId != null ? passengerId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -139,7 +139,7 @@ public class Passenger implements Serializable {
             return false;
         }
         Passenger other = (Passenger) object;
-        if ((this.passengerId == null && other.passengerId != null) || (this.passengerId != null && !this.passengerId.equals(other.passengerId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -147,7 +147,7 @@ public class Passenger implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Passenger[ passengerId=" + passengerId + " ]";
+        return "entities.Passenger[ id=" + id + " ]";
     }
     
 }

@@ -6,7 +6,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="model.manager.SeatManager" %>
+<%@page import="database.SeatDB" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,7 +32,7 @@
             $(document).ready(function () {
                 $.ajax({
                     type: "get",
-                    url: "BookingServlet",
+                    url: "SeatingServlet",
                     dataType: 'json',
                     error: function () {
                         alert("Error Occurred");
@@ -56,7 +56,7 @@
                                 );
                             });
                         });
-                        
+
                     }
                 });
             });
@@ -65,7 +65,7 @@
     </head>
     <body>
         <div class="SeatingLayout"> 
-            <form name="chooseSeat" action="BookingServlet" method="POST">
+            <form name="chooseSeat" action="SeatingServlet" method="POST">
                 <div class="tables">
                     <table border="0" class="tbl">
                         <tbody>
@@ -199,6 +199,8 @@
                 <br /><br /><br /><br /><br /><br />
                 <div class="SeatingClassInfo"><p>1st Class Seats numbered from "seat01F" to "seat12F"</p></div><br /><br /><br />
                 <div class="SeatingClassInfo"><p>Economy Class Seats numbered from "seat13E" to "seat24E"</p></div>
+                <form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p>
+                    <input type="submit" value="seats" name="submit" style="width:75px" /></form>
                 <br /><br /><br />
                 <div class="radio">
                     <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
@@ -210,13 +212,13 @@
             </div>
         </div>
         <h3><%= request.getAttribute("seats")%></h3>
-        <form name="chooseEconomy" action="BookingServlet" method="POST">
+        <form name="chooseEconomy" action="SeatingServlet" method="POST">
             <p><input type="submit" value="Economy" name="submit" /> Select if you want an Economy Seat</p>
             <div class="radio">
-                    <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
-                    <p><input type="radio" value="CHILD" name="Passenger" />Child</p>
-                    <p><input type="radio" value="INFANT" name="Passenger" />Infant</p>
-                </div>
+                <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
+                <p><input type="radio" value="CHILD" name="Passenger" />Child</p>
+                <p><input type="radio" value="INFANT" name="Passenger" />Infant</p>
+            </div>
         </form>
     </body>
 </html>

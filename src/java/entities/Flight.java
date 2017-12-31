@@ -6,8 +6,8 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,57 +33,62 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "flight")
 @NamedQueries({
-    @NamedQuery(name = "Flight.findAll", query = "SELECT f FROM Flight f")})
+    @NamedQuery(name = "Flight.findAll", query = "SELECT f FROM Flight f")
+    , @NamedQuery(name = "Flight.findById", query = "SELECT f FROM Flight f WHERE f.id = :id")
+    , @NamedQuery(name = "Flight.findByDepartureDateTime", query = "SELECT f FROM Flight f WHERE f.departureDateTime = :departureDateTime")
+    , @NamedQuery(name = "Flight.findByArrivalDateTime", query = "SELECT f FROM Flight f WHERE f.arrivalDateTime = :arrivalDateTime")})
 public class Flight implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "FlightId")
-    private Integer flightId;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "LeaveDateTime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date departureDateTime;
+    @Column(name = "Id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DepartureDateTime")
     @Temporal(TemporalType.TIMESTAMP)
+    private Date departureDateTime;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ArrivalDateTime")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date arrivalDateTime;
-    @JoinColumn(name = "Route_RouteId", referencedColumnName = "RouteId")
+    @ManyToMany(mappedBy = "flightCollection")
+    private Collection<Booking> bookingCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flight")
+    private Collection<Seat> seatCollection;
+    @JoinColumn(name = "Route_Id", referencedColumnName = "Id")
     @ManyToOne(optional = false)
-    private Route routeRouteId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flightFlightId")
-    private List<Passenger> passengerList;
+    private Route routeId;
 
     public Flight() {
     }
 
-    public Flight(Integer flightId) {
-        this.flightId = flightId;
+    public Flight(Integer id) {
+        this.id = id;
     }
 
-    public Flight(Integer flightId, Date departureDateTime, Date arrivalDateTime) {
-        this.flightId = flightId;
+    public Flight(Integer id, Date departureDateTime, Date arrivalDateTime) {
+        this.id = id;
         this.departureDateTime = departureDateTime;
         this.arrivalDateTime = arrivalDateTime;
     }
 
-    public Integer getFlightId() {
-        return flightId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setFlightId(Integer flightId) {
-        this.flightId = flightId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Date getDepartureDateTimeDateTime() {
+    public Date getDepartureDateTime() {
         return departureDateTime;
     }
 
-    public void setDepartureDateTimeDateTime(Date departureDateTime) {
+    public void setDepartureDateTime(Date departureDateTime) {
         this.departureDateTime = departureDateTime;
     }
 
@@ -94,26 +100,34 @@ public class Flight implements Serializable {
         this.arrivalDateTime = arrivalDateTime;
     }
 
-    public Route getRouteRouteId() {
-        return routeRouteId;
+    public Collection<Booking> getBookingCollection() {
+        return bookingCollection;
     }
 
-    public void setRouteRouteId(Route routeRouteId) {
-        this.routeRouteId = routeRouteId;
+    public void setBookingCollection(Collection<Booking> bookingCollection) {
+        this.bookingCollection = bookingCollection;
     }
 
-    public List<Passenger> getPassengerList() {
-        return passengerList;
+    public Collection<Seat> getSeatCollection() {
+        return seatCollection;
     }
 
-    public void setPassengerList(List<Passenger> passengerList) {
-        this.passengerList = passengerList;
+    public void setSeatCollection(Collection<Seat> seatCollection) {
+        this.seatCollection = seatCollection;
+    }
+
+    public Route getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Route routeId) {
+        this.routeId = routeId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (flightId != null ? flightId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -124,7 +138,7 @@ public class Flight implements Serializable {
             return false;
         }
         Flight other = (Flight) object;
-        if ((this.flightId == null && other.flightId != null) || (this.flightId != null && !this.flightId.equals(other.flightId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -132,7 +146,7 @@ public class Flight implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Flight[ flightId=" + flightId + " ]";
+        return "entities.Flight[ id=" + id + " ]";
     }
     
 }

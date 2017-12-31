@@ -6,7 +6,6 @@
 package cart;
 
 import entities.Seat;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 /**

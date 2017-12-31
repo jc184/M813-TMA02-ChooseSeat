@@ -32,7 +32,7 @@ import javax.validation.constraints.Size;
 @Table(name = "customer")
 @NamedQueries({
     @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c")
-    , @NamedQuery(name = "Customer.findByCustomerId", query = "SELECT c FROM Customer c WHERE c.customerId = :customerId")
+    , @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id")
     , @NamedQuery(name = "Customer.findByTitle", query = "SELECT c FROM Customer c WHERE c.title = :title")
     , @NamedQuery(name = "Customer.findByFirstName", query = "SELECT c FROM Customer c WHERE c.firstName = :firstName")
     , @NamedQuery(name = "Customer.findBySurname", query = "SELECT c FROM Customer c WHERE c.surname = :surname")
@@ -56,8 +56,8 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "CustomerId")
-    private Integer customerId;
+    @Column(name = "Id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
@@ -143,18 +143,18 @@ public class Customer implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Country")
     private String country;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerCustomerId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
     private Collection<Booking> bookingCollection;
 
     public Customer() {
     }
 
-    public Customer(Integer customerId) {
-        this.customerId = customerId;
+    public Customer(Integer id) {
+        this.id = id;
     }
 
-    public Customer(Integer customerId, String title, String firstName, String surname, String mobileNumber, String homePhoneNumber, String emailAddress, String loginName, String loginPassword, String cardType, String cardNumber, Date cardExpiry, String addressLine1, String addressLine2, String postCode, String townCity, String countyState, String country) {
-        this.customerId = customerId;
+    public Customer(Integer id, String title, String firstName, String surname, String mobileNumber, String homePhoneNumber, String emailAddress, String loginName, String loginPassword, String cardType, String cardNumber, Date cardExpiry, String addressLine1, String addressLine2, String postCode, String townCity, String countyState, String country) {
+        this.id = id;
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -174,12 +174,12 @@ public class Customer implements Serializable {
         this.country = country;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -329,7 +329,7 @@ public class Customer implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (customerId != null ? customerId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -340,7 +340,7 @@ public class Customer implements Serializable {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.customerId == null && other.customerId != null) || (this.customerId != null && !this.customerId.equals(other.customerId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -348,7 +348,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Customer[ customerId=" + customerId + " ]";
+        return "entities.Customer[ id=" + id + " ]";
     }
     
 }

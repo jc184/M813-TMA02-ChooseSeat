@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -30,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "Seat.findAll", query = "SELECT s FROM Seat s")
     , @NamedQuery(name = "Seat.findBySeatNo", query = "SELECT s FROM Seat s WHERE s.seatPK.seatNo = :seatNo")
-    , @NamedQuery(name = "Seat.findByFlightFlightId", query = "SELECT s FROM Seat s WHERE s.seatPK.flightFlightId = :flightFlightId")
+    , @NamedQuery(name = "Seat.findByFlightId", query = "SELECT s FROM Seat s WHERE s.seatPK.flightId = :flightId")
     , @NamedQuery(name = "Seat.findBySeatPrice", query = "SELECT s FROM Seat s WHERE s.seatPrice = :seatPrice")})
 public class Seat implements Serializable {
 
@@ -42,10 +41,10 @@ public class Seat implements Serializable {
     @NotNull
     @Column(name = "SeatPrice")
     private Double seatPrice;
-    @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")
+    @JoinColumn(name = "Booking_Id", referencedColumnName = "Id")
     @ManyToOne(optional = false)
-    private Booking booking;
-    @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId", insertable = false, updatable = false)
+    private Booking bookingId;
+    @JoinColumn(name = "Flight_Id", referencedColumnName = "Id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Flight flight;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seat")
@@ -54,7 +53,7 @@ public class Seat implements Serializable {
     public Seat() {
     }
 
-    public Seat(entities.SeatPK seatPK) {
+    public Seat(SeatPK seatPK) {
         this.seatPK = seatPK;
     }
 
@@ -75,20 +74,20 @@ public class Seat implements Serializable {
         this.seatPK = seatPK;
     }
 
-    public Double getSeatPrice() {
+    public double getSeatPrice() {
         return seatPrice;
     }
 
-    public void setSeatPrice(Double seatPrice) {
+    public void setSeatPrice(double seatPrice) {
         this.seatPrice = seatPrice;
     }
 
-    public Booking getBooking() {
-        return booking;
+    public Booking getBookingId() {
+        return bookingId;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setBookingId(Booking bookingId) {
+        this.bookingId = bookingId;
     }
 
     public Flight getFlight() {

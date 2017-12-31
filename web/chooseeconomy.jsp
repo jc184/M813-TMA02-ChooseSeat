@@ -23,7 +23,7 @@
             <td>
             <tr>
                 <!-- COMMENT HTML WITH THIS -->
-                <td><form name="Seats" action="BookingServlet" method="POST"> <p>Seating Layout</p></td>
+                <td><form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p></td>
                 <td><input type="submit" value="seats" name="submit" style="width:75px" /></td></form>
             </tr>
         </table>

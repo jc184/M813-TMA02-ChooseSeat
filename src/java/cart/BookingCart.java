@@ -26,9 +26,9 @@ public class BookingCart {
     public BookingCart() {
         persons = new ArrayList<>();
         total = 0.0;
-        adultDiscount = 0.0;
+        adultDiscount = 1.0;
         childDiscount = 0.5;
-        infantDiscount = 0.75;
+        infantDiscount = 0.25;
     }
 
     public List<BookingCartItem> getPersons() {

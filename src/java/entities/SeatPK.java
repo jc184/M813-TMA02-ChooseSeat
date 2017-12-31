@@ -24,7 +24,7 @@ public class SeatPK implements Serializable {
     private int seatNo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Flight_FlightId")
+    @Column(name = "Flight_Id")
     private int flightId;
 
     public SeatPK() {
@@ -77,7 +77,7 @@ public class SeatPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.SeatPK[ seatNo=" + seatNo + ", flightFlightId=" + flightId + " ]";
+        return "entities.SeatPK[ seatNo=" + seatNo + ", flightId=" + flightId + " ]";
     }
     
 }

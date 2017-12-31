@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,7 +32,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "booking")
 @NamedQueries({
     @NamedQuery(name = "Booking.findAll", query = "SELECT b FROM Booking b")
-    , @NamedQuery(name = "Booking.findByBookingId", query = "SELECT b FROM Booking b WHERE b.bookingId = :bookingId")
+    , @NamedQuery(name = "Booking.findById", query = "SELECT b FROM Booking b WHERE b.id = :id")
     , @NamedQuery(name = "Booking.findByNoOfAdults", query = "SELECT b FROM Booking b WHERE b.noOfAdults = :noOfAdults")
     , @NamedQuery(name = "Booking.findByNoOfChildren", query = "SELECT b FROM Booking b WHERE b.noOfChildren = :noOfChildren")
     , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")})
@@ -43,8 +42,8 @@ public class Booking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "BookingId")
-    private Integer bookingId;
+    @Column(name = "Id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "NoOfAdults")
@@ -58,38 +57,38 @@ public class Booking implements Serializable {
     @Column(name = "NoOfInfants")
     private int noOfInfants;
     @JoinTable(name = "flightbooking", joinColumns = {
-        @JoinColumn(name = "Booking_BookingId", referencedColumnName = "BookingId")}, inverseJoinColumns = {
-        @JoinColumn(name = "Flight_FlightId", referencedColumnName = "FlightId")})
+        @JoinColumn(name = "Booking_Id", referencedColumnName = "Id")}, inverseJoinColumns = {
+        @JoinColumn(name = "Flight_Id", referencedColumnName = "Id")})
     @ManyToMany
     private Collection<Flight> flightCollection;
-    @OneToMany(mappedBy = "bookingBookingId")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bookingId")
     private Collection<Seat> seatCollection;
-    @JoinColumn(name = "Customer_CustomerId", referencedColumnName = "CustomerId")
+    @JoinColumn(name = "Customer_Id", referencedColumnName = "Id")
     @ManyToOne(optional = false)
-    private Customer customerCustomerId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingBookingId")
+    private Customer customerId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
     private Collection<Passenger> passengerCollection;
 
     public Booking() {
     }
 
-    public Booking(Integer bookingId) {
-        this.bookingId = bookingId;
+    public Booking(Integer id) {
+        this.id = id;
     }
 
-    public Booking(Integer bookingId, int noOfAdults, int noOfChildren, int noOfInfants) {
-        this.bookingId = bookingId;
+    public Booking(Integer id, int noOfAdults, int noOfChildren, int noOfInfants) {
+        this.id = id;
         this.noOfAdults = noOfAdults;
         this.noOfChildren = noOfChildren;
         this.noOfInfants = noOfInfants;
     }
 
-    public Integer getBookingId() {
-        return bookingId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setBookingId(Integer bookingId) {
-        this.bookingId = bookingId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public int getNoOfAdults() {
@@ -132,12 +131,12 @@ public class Booking implements Serializable {
         this.seatCollection = seatCollection;
     }
 
-    public Customer getCustomerCustomerId() {
-        return customerCustomerId;
+    public Customer getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerCustomerId(Customer customerCustomerId) {
-        this.customerCustomerId = customerCustomerId;
+    public void setCustomerId(Customer customerId) {
+        this.customerId = customerId;
     }
 
     public Collection<Passenger> getPassengerCollection() {
@@ -151,7 +150,7 @@ public class Booking implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (bookingId != null ? bookingId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -162,7 +161,7 @@ public class Booking implements Serializable {
             return false;
         }
         Booking other = (Booking) object;
-        if ((this.bookingId == null && other.bookingId != null) || (this.bookingId != null && !this.bookingId.equals(other.bookingId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -170,7 +169,7 @@ public class Booking implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Booking[ bookingId=" + bookingId + " ]";
+        return "entities.Booking[ id=" + id + " ]";
     }
-
+    
 }
