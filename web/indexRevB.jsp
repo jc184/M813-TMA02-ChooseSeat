@@ -63,7 +63,7 @@
         </script>
         <title>JSP Page</title>
     </head>
-    <body>
+    <body onload="myAjaxScript()">
         <div class="SeatingLayout"> 
             <form name="chooseSeat" action="SeatingServlet" method="POST">
                 <div class="tables">
