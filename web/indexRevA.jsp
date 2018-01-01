@@ -6,7 +6,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="model.manager.SeatManager" %>
+<%@page import="database.SeatDB" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +17,7 @@
             $(document).ready(function () {
                 $.ajax({
                     type: "get",
-                    url: "BookingServlet",
+                    url: "SeatingServlet",
                     dataType: 'json',
                     error: function () {
                         alert("Error Occurred");
@@ -53,7 +53,7 @@
     </head>
     <body>
         <div class="SeatingLayout"> 
-            <form name="chooseSeat" action="BookingServlet" method="POST">
+            <form name="chooseSeat" action="SeatingServlet" method="POST">
                 <table cellpadding="0" cellspacing="0" border="0" id="table">
                     <!-- COMMENT HTML WITH THIS <thead>
                         <tr>

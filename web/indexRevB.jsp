@@ -6,7 +6,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="model.manager.SeatManager" %>
+<%@page import="database.SeatDB" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,9 +15,15 @@
         <style>
             table {
                 width:70px; float:left;
-
             }
             th,td {
+                padding: 0px;
+            }
+            radio {
+                float: bottom;
+            }
+            .SeatingClassInfo {
+                float:left;
                 padding: 0px;
             }
         </style>
@@ -26,7 +32,7 @@
             $(document).ready(function () {
                 $.ajax({
                     type: "get",
-                    url: "BookingServlet",
+                    url: "SeatingServlet",
                     dataType: 'json',
                     error: function () {
                         alert("Error Occurred");
@@ -43,164 +49,176 @@
                                 $.each(document.getElementsByClassName("btn"), function (index) {
                                     $.each(point[1], function (index, value) {
                                         if (value === true) {
-                                            document.getElementsByClassName("btn")[index].style.color = "red";//
+                                            document.getElementsByClassName("btn")[index].style.color = "red";
                                         }
                                     });
                                 }
                                 );
                             });
                         });
+
                     }
                 });
             });
         </script>
         <title>JSP Page</title>
     </head>
-    <body>
+    <body onload="myAjaxScript()">
         <div class="SeatingLayout"> 
-            <form name="chooseSeat" action="BookingServlet" method="POST">
+            <form name="chooseSeat" action="SeatingServlet" method="POST">
                 <div class="tables">
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat00F" name="submit" id="0" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat01F" name="submit" id="1" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat01F" name="submit" id="1" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat02F" name="submit" id="2" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat03F" name="submit" id="3" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat03F" name="submit" id="3" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat04F" name="submit" id="4" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat04F" name="submit" id="4" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat05F" name="submit" id="5" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat06F" name="submit" id="6" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat06F" name="submit" id="6" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat07F" name="submit" id="7" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat07F" name="submit" id="7" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat08F" name="submit" id="8" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat09F" name="submit" id="9" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat09F" name="submit" id="9" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat10F" name="submit" id="10" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat10F" name="submit" id="10" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat11F" name="submit" id="11" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat12F" name="submit" id="12" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat12E" name="submit" id="12" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat13E" name="submit" id="13" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat13E" name="submit" id="13" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat14E" name="submit" id="14" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat15E" name="submit" id="15" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat15E" name="submit" id="15" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat16E" name="submit" id="16" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat16E" name="submit" id="16" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat17E" name="submit" id="17" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat18E" name="submit" id="18" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat18E" name="submit" id="18" class="btn" /></td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" value="seat19E" name="submit" id="19" class="btn"/></td>
-                            </tr>
-                            <tr>
-                                <th><h3></h3></th>
+                                <td><input type="submit" value="seat19E" name="submit" id="19" class="btn" /></td>
                             </tr>
                             <tr>
                                 <td><input type="submit" value="seat20E" name="submit" id="20" class="btn"/></td>
                             </tr>
+                            <tr>
+                                <th><h3></h3></th>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="seat21E" name="submit" id="21" class="btn"/></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table border="0" class="tbl">
                         <tbody>
                             <tr>
-                                <td><input type="submit" value="seat21E" name="submit" id="21" class="btn" /></td>
+                                <td><input type="submit" value="seat22E" name="submit" id="22" class="btn" /></td>
                             </tr>
                             <tr>
-                                <td><input type="submit" value="seat22E" name="submit" id="22" class="btn"/></td>
+                                <td><input type="submit" value="seat23E" name="submit" id="23" class="btn"/></td>
                             </tr>
                             <tr>
                                 <th><h3></h3></th>
                             </tr>
                             <tr>
-                                <td><input type="submit" value="seat23E" name="submit" id="23" class="btn"/></td>
+                                <td><input type="submit" value="seat24E" name="submit" id="24" class="btn"/></td>
                             </tr>
                         </tbody>
                     </table>
-                    <br />
                 </div>
-                <br /><br />
+                <br /><br /><br /><br /><br /><br />
+                <div class="SeatingClassInfo"><p>1st Class Seats numbered from "seat01F" to "seat12F"</p></div><br /><br /><br />
+                <div class="SeatingClassInfo"><p>Economy Class Seats numbered from "seat13E" to "seat24E"</p></div>
+                <form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p>
+                    <input type="submit" value="seats" name="submit" style="width:75px" /></form>
+                <br /><br /><br />
                 <div class="radio">
-                    <input type="radio" value="ADULT" name="Passenger" checked="checked"/><p>Adult</p>
-                    <input type="radio" value="CHILD" name="Passenger" /><p>Child</p>
-                    <input type="radio" value="INFANT" name="Passenger" /><p>Infant</p>
+                    <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
+                    <p><input type="radio" value="CHILD" name="Passenger" />Child</p>
+                    <p><input type="radio" value="INFANT" name="Passenger" />Infant</p>
                 </div></form>
-
             <div>
-                <p id="output"></p></div>
-
+                <p id="output"></p>
+            </div>
         </div>
         <h3><%= request.getAttribute("seats")%></h3>
+        <form name="chooseEconomy" action="SeatingServlet" method="POST">
+            <p><input type="submit" value="Economy" name="submit" /> Select if you want an Economy Seat</p>
+            <div class="radio">
+                <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
+                <p><input type="radio" value="CHILD" name="Passenger" />Child</p>
+                <p><input type="radio" value="INFANT" name="Passenger" />Infant</p>
+            </div>
+        </form>
     </body>
 </html>

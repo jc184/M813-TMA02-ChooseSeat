@@ -5,7 +5,7 @@
  */
 package model.enums;
 
-import model.manager.SeatManager;
+import database.SeatDB;
 
 /**
  * Alba Airways application M813-TMA02-ChooseSeat
@@ -13,19 +13,18 @@ import model.manager.SeatManager;
  * @author james chalmers Open University F6418079
  */
 public enum SeatEnum {
-    SEAT00("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT01("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT02("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT03("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT04("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT05("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT06("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT07("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
+    SEAT01("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//0
+    SEAT02("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//1
+    SEAT03("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//2
+    SEAT04("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//3
+    SEAT05("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//4
+    SEAT06("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//5
+    SEAT07("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),//etc
     SEAT08("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT09("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT10("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT11("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
-    SEAT12("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
+    SEAT12("FirstClass", 75.0, 38.0, 19.0, Boolean.FALSE),
     SEAT13("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
     SEAT14("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
     SEAT15("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
@@ -36,7 +35,8 @@ public enum SeatEnum {
     SEAT20("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
     SEAT21("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
     SEAT22("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
-    SEAT23("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE);
+    SEAT23("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE),
+    SEAT24("EconomyClass", 50.0, 25.0, 12.0, Boolean.FALSE);
     
     String SeatDesignation;
     double adultFare;

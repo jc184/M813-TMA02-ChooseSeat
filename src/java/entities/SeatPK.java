@@ -3,68 +3,59 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entities;
+package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
 
 /**
- * Alba Airways application M813-TMA02-ChooseSeat
- * @author james chalmers Open University F6418079
+ *
+ * @author james
  */
 @Embeddable
 public class SeatPK implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Basic(optional = false)
     @NotNull
     @Column(name = "SeatNo")
-    private int seatNumber;
+    private int seatNo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AircraftId")
-    private int aircraftId;
+    @Column(name = "Flight_Id")
+    private int flightId;
 
     public SeatPK() {
     }
 
-    public SeatPK(int seatNumber, int aircraftId) {
-        this.seatNumber = seatNumber;
-        this.aircraftId = aircraftId;
+    public SeatPK(int seatNo, int flightId) {
+        this.seatNo = seatNo;
+        this.flightId = flightId;
     }
 
-    public SeatPK(SingularAttribute<Seat, SeatPK> seatPK) {
-        this.getSeatNumber();
-        this.getAircraftId();
-
+    public int getSeatNo() {
+        return seatNo;
     }
 
-    public int getSeatNumber() {
-        return seatNumber;
+    public void setSeatNo(int seatNo) {
+        this.seatNo = seatNo;
     }
 
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
+    public int getFlightId() {
+        return flightId;
     }
 
-    public int getAircraftId() {
-        return aircraftId;
-    }
-
-    public void setAircraftId(int aircraftId) {
-        this.aircraftId = aircraftId;
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) seatNumber;
-        hash += (int) aircraftId;
+        hash += (int) seatNo;
+        hash += (int) flightId;
         return hash;
     }
 
@@ -75,10 +66,10 @@ public class SeatPK implements Serializable {
             return false;
         }
         SeatPK other = (SeatPK) object;
-        if (this.seatNumber != other.seatNumber) {
+        if (this.seatNo != other.seatNo) {
             return false;
         }
-        if (this.aircraftId != other.aircraftId) {
+        if (this.flightId != other.flightId) {
             return false;
         }
         return true;
@@ -86,7 +77,7 @@ public class SeatPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.SeatPK[ seatNo=" + seatNumber + ", aircraftAircraftId=" + aircraftId + " ]";
+        return "entities.SeatPK[ seatNo=" + seatNo + ", flightId=" + flightId + " ]";
     }
     
 }

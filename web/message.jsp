@@ -16,7 +16,6 @@
         <h3>Info: <%= request.getAttribute("msg")%></h3>
         <h3>Seat Number: <%= request.getAttribute("seatNumber")%></h3>
         <h3>Seat Type: <%= request.getAttribute("seatType")%></h3>
-        <h3><%= request.getAttribute("seats")%></h3>
         <h3>Passenger Type: <%= request.getAttribute("passengerType")%></h3>
         <h3>Fare: <%= request.getAttribute("seatCost")%></h3>
         <table>
@@ -28,7 +27,7 @@
             <td>
             <tr>
                 <!-- COMMENT HTML WITH THIS -->
-                <td><form name="Seats" action="BookingServlet" method="POST"> <p>Seating Layout</p></td>
+                <td><form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p></td>
                 <td><input type="submit" value="seats" name="submit" style="width:75px" /></td></form>
             </tr>
         </table>

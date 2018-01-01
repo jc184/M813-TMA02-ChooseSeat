@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entities;
+package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,60 +16,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import model.enums.SeatTypeEnum;
 
 /**
- * Alba Airways application M813-TMA02-ChooseSeat
  *
- * @author james chalmers Open University F6418079
+ * @author james
  */
 @Entity
 @Table(name = "seat")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Seat.findAll", query = "SELECT s FROM Seat s")
     , @NamedQuery(name = "Seat.findBySeatNo", query = "SELECT s FROM Seat s WHERE s.seatPK.seatNo = :seatNo")
-    , @NamedQuery(name = "Seat.findByAircraftAircraftId", query = "SELECT s FROM Seat s WHERE s.seatPK.aircraftAircraftId = :aircraftAircraftId")
-    , @NamedQuery(name = "Seat.findBySeatType", query = "SELECT s FROM Seat s WHERE s.seatType = :seatType")})
+    , @NamedQuery(name = "Seat.findByFlightId", query = "SELECT s FROM Seat s WHERE s.seatPK.flightId = :flightId")
+    , @NamedQuery(name = "Seat.findBySeatPrice", query = "SELECT s FROM Seat s WHERE s.seatPrice = :seatPrice")})
 public class Seat implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    private SeatPK seatPK;
+    protected SeatPK seatPK;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "SeatType")
-    private SeatTypeEnum seatType;
-    @JoinColumn(name = "BookingId", referencedColumnName = "BookingId")
-    @ManyToOne
+    @Column(name = "SeatPrice")
+    private Double seatPrice;
+    @JoinColumn(name = "Booking_Id", referencedColumnName = "Id")
+    @ManyToOne(optional = false)
     private Booking bookingId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "SeatBooked")
-    private boolean booked;
+    @JoinColumn(name = "Flight_Id", referencedColumnName = "Id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Flight flight;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seat")
+    private Collection<Passenger> passengerCollection;
 
-    public Seat(SingularAttribute<Seat, SeatPK> seatPK, SeatTypeEnum seatType, SingularAttribute<Seat, Booking> bookingId, boolean booked) {
-        this.seatPK = (SeatPK) seatPK;
-        this.seatType = seatType;
-        this.bookingId = (Booking) bookingId;
-        this.booked = booked;
-    }
-
-    public boolean isBooked() {
-        return booked;
-    }
-
-    public void setBooked(boolean booked) {
-        this.booked = booked;
-    }
-    
     public Seat() {
     }
 
@@ -75,19 +57,14 @@ public class Seat implements Serializable {
         this.seatPK = seatPK;
     }
 
-    public Seat(SeatPK seatPK, SeatTypeEnum seatType, Booking bookingId, boolean booked) {
+    public Seat(SeatPK seatPK, double seatPrice) {
         this.seatPK = seatPK;
-        this.seatType = seatType;
-        this.bookingId = bookingId;
-        this.booked = booked;
+        this.seatPrice = seatPrice;
     }
 
-//    public Seat(int seatNo, int aircraftId, SeatTypeEnum seatType, boolean booked) {
-//        this.seatPK = new SeatPK(seatNo, aircraftId);
-//        this.seatType = seatType;
-//        this.booked = booked;
-//    }
-
+    public Seat(int seatNo, int flightId) {
+        this.seatPK = new SeatPK(seatNo, flightId);
+    }
 
     public SeatPK getSeatPK() {
         return seatPK;
@@ -97,12 +74,12 @@ public class Seat implements Serializable {
         this.seatPK = seatPK;
     }
 
-    public SeatTypeEnum getSeatType() {
-        return seatType;
+    public double getSeatPrice() {
+        return seatPrice;
     }
 
-    public void setSeatType(SeatTypeEnum seatType) {
-        this.seatType = seatType;
+    public void setSeatPrice(double seatPrice) {
+        this.seatPrice = seatPrice;
     }
 
     public Booking getBookingId() {
@@ -111,6 +88,22 @@ public class Seat implements Serializable {
 
     public void setBookingId(Booking bookingId) {
         this.bookingId = bookingId;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public Collection<Passenger> getPassengerCollection() {
+        return passengerCollection;
+    }
+
+    public void setPassengerCollection(Collection<Passenger> passengerCollection) {
+        this.passengerCollection = passengerCollection;
     }
 
     @Override
@@ -137,5 +130,5 @@ public class Seat implements Serializable {
     public String toString() {
         return "entities.Seat[ seatPK=" + seatPK + " ]";
     }
-
+    
 }
