@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -15,8 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,7 +34,9 @@ import javax.validation.constraints.NotNull;
     , @NamedQuery(name = "Booking.findById", query = "SELECT b FROM Booking b WHERE b.id = :id")
     , @NamedQuery(name = "Booking.findByNoOfAdults", query = "SELECT b FROM Booking b WHERE b.noOfAdults = :noOfAdults")
     , @NamedQuery(name = "Booking.findByNoOfChildren", query = "SELECT b FROM Booking b WHERE b.noOfChildren = :noOfChildren")
-    , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")})
+    , @NamedQuery(name = "Booking.findByNoOfInfants", query = "SELECT b FROM Booking b WHERE b.noOfInfants = :noOfInfants")
+    , @NamedQuery(name = "Booking.findByAmount", query = "SELECT b FROM Booking b WHERE b.amount = :amount")
+    , @NamedQuery(name = "Booking.findByConfirmationNo", query = "SELECT b FROM Booking b WHERE b.confirmationNo = :confirmationNo")})
 public class Booking implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,16 +57,26 @@ public class Booking implements Serializable {
     @NotNull
     @Column(name = "NoOfInfants")
     private int noOfInfants;
-    @JoinTable(name = "flightbooking", joinColumns = {
-        @JoinColumn(name = "Booking_Id", referencedColumnName = "Id")}, inverseJoinColumns = {
-        @JoinColumn(name = "Flight_Id", referencedColumnName = "Id")})
-    @ManyToMany
-    private Collection<Flight> flightCollection;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bookingId")
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Amount")
+    private BigDecimal amount;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ConfirmationNo")
+    private int confirmationNo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
     private Collection<Seat> seatCollection;
     @JoinColumn(name = "Customer_Id", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private Customer customerId;
+    @JoinColumn(name = "OutboundFlight_Id", referencedColumnName = "Id")
+    @ManyToOne(optional = false)
+    private Flight outboundFlightId;
+    @JoinColumn(name = "InboundFlight_Id", referencedColumnName = "Id")
+    @ManyToOne
+    private Flight inboundFlightId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
     private Collection<Passenger> passengerCollection;
 
@@ -76,11 +87,13 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    public Booking(Integer id, int noOfAdults, int noOfChildren, int noOfInfants) {
+    public Booking(Integer id, int noOfAdults, int noOfChildren, int noOfInfants, BigDecimal amount, int confirmationNo) {
         this.id = id;
         this.noOfAdults = noOfAdults;
         this.noOfChildren = noOfChildren;
         this.noOfInfants = noOfInfants;
+        this.amount = amount;
+        this.confirmationNo = confirmationNo;
     }
 
     public Integer getId() {
@@ -115,12 +128,20 @@ public class Booking implements Serializable {
         this.noOfInfants = noOfInfants;
     }
 
-    public Collection<Flight> getFlightCollection() {
-        return flightCollection;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setFlightCollection(Collection<Flight> flightCollection) {
-        this.flightCollection = flightCollection;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public int getConfirmationNo() {
+        return confirmationNo;
+    }
+
+    public void setConfirmationNo(int confirmationNo) {
+        this.confirmationNo = confirmationNo;
     }
 
     public Collection<Seat> getSeatCollection() {
@@ -137,6 +158,22 @@ public class Booking implements Serializable {
 
     public void setCustomerId(Customer customerId) {
         this.customerId = customerId;
+    }
+
+    public Flight getOutboundFlightId() {
+        return outboundFlightId;
+    }
+
+    public void setOutboundFlightId(Flight outboundFlightId) {
+        this.outboundFlightId = outboundFlightId;
+    }
+
+    public Flight getInboundFlightId() {
+        return inboundFlightId;
+    }
+
+    public void setInboundFlightId(Flight inboundFlightId) {
+        this.inboundFlightId = inboundFlightId;
     }
 
     public Collection<Passenger> getPassengerCollection() {

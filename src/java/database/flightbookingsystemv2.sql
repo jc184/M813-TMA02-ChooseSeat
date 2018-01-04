@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 --
 
 INSERT INTO `customer` (`Id`, `Title`, `FirstName`, `Surname`, `MobileNumber`, `HomePhoneNumber`, `EmailAddress`, `LoginName`, `LoginPassword`, `CardType`, `CardNumber`, `CardExpiry`, `AddressLine1`, `AddressLine2`, `PostCode`, `TownCity`, `CountyState`, `Country`) VALUES
-(1, 'mr', 'james', 'chalmers', '07552605450', '01343547869', 'james.chalmers184@gmail.com', 'jc184', '1Acheilidh1', 'VISA', '4111222233334444', '2019-09-09', '37 Forteath Avenue', 'west end', 'IV30 1TF', 'Elgin', 'Morayshire', 'UK');
+(1, 'mr', 'james', 'chalmers', '07552605450', '01343547869', 'james.chalmers184@gmail.com', 'jc184', 'password', 'VISA', '4111222233334444', '2019-09-09', '37 Forteath Avenue', 'west end', 'IV30 1TF', 'Elgin', 'Morayshire', 'UK');
 
 -- --------------------------------------------------------
 

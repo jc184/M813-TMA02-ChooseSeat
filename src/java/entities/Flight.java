@@ -35,6 +35,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "Flight.findAll", query = "SELECT f FROM Flight f")
     , @NamedQuery(name = "Flight.findById", query = "SELECT f FROM Flight f WHERE f.id = :id")
+    , @NamedQuery(name = "Flight.findByFlightDate", query = "SELECT f FROM Flight f WHERE f.flightDate = :flightDate")
     , @NamedQuery(name = "Flight.findByDepartureDateTime", query = "SELECT f FROM Flight f WHERE f.departureDateTime = :departureDateTime")
     , @NamedQuery(name = "Flight.findByArrivalDateTime", query = "SELECT f FROM Flight f WHERE f.arrivalDateTime = :arrivalDateTime")})
 public class Flight implements Serializable {
@@ -45,6 +46,11 @@ public class Flight implements Serializable {
     @Basic(optional = false)
     @Column(name = "Id")
     private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "FlightDate")
+    @Temporal(TemporalType.DATE)
+    private Date flightDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DepartureDateTime")
@@ -84,6 +90,16 @@ public class Flight implements Serializable {
         this.id = id;
     }
 
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
+    }
+
+    
+    
     public Date getDepartureDateTime() {
         return departureDateTime;
     }
@@ -148,5 +164,5 @@ public class Flight implements Serializable {
     public String toString() {
         return "entities.Flight[ id=" + id + " ]";
     }
-    
+
 }

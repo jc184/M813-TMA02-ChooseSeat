@@ -65,15 +65,15 @@ public class SeatDB {
         return isSeatBooked;
     }
 
-    public void saveSeatingLayout(boolean[] seats) {
-        int seatNumber = 0;
-        for (SeatEnum seatEnum : SeatEnum.values()) {
-            if (seatNumber == seatEnum.ordinal()) {
-                this.setSeats(seats);
-                Arrays.toString(seats);
-            }
-        }
-    }
+//    public void saveSeatingLayout(boolean[] seats) {
+//        int seatNumber = 0;
+//        for (SeatEnum seatEnum : SeatEnum.values()) {
+//            if (seatNumber == seatEnum.ordinal()) {
+//                this.setSeats(seats);
+//                Arrays.toString(seats);
+//            }
+//        }
+//    }
 
     public boolean isSeatBooked(int seatNumber) {
         for (SeatEnum seatEnum : SeatEnum.values()) {

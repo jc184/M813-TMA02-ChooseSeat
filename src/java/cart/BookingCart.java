@@ -68,7 +68,6 @@ public class BookingCart {
         Booking booking = new Booking();
         Seat seat = new Seat();
         amount = (booking.getNoOfAdults() * seat.getSeatPrice() * adultDiscount) + (booking.getNoOfChildren() * seat.getSeatPrice() * childDiscount) + (booking.getNoOfInfants() * seat.getSeatPrice() * infantDiscount);
-
         return amount;
     }
 

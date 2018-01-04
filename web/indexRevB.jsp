@@ -28,7 +28,7 @@
             }
         </style>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script type="text/javascript">
+        <script type="text/javascript" >
             $(document).ready(function () {
                 $.ajax({
                     type: "get",
@@ -196,17 +196,19 @@
                         </tbody>
                     </table>
                 </div>
-                <br /><br /><br /><br /><br /><br />
-                <div class="SeatingClassInfo"><p>1st Class Seats numbered from "seat01F" to "seat12F"</p></div><br /><br /><br />
-                <div class="SeatingClassInfo"><p>Economy Class Seats numbered from "seat13E" to "seat24E"</p></div>
-                <form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p>
-                    <input type="submit" value="seats" name="submit" style="width:75px" /></form>
+            </form>
+            <br /><br /><br /><br /><br /><br />
+            <div class="SeatingClassInfo"><p>1st Class Seats numbered from "seat01F" to "seat12F"</p></div><br /><br /><br />
+            <div class="SeatingClassInfo"><p>Economy Class Seats numbered from "seat13E" to "seat24E"</p></div>
+            <form name="Seats" action="SeatingServlet" method="POST"> <p>Seating Layout</p>
+                <input type="submit" value="seats" name="submit" style="width:75px" />
                 <br /><br /><br />
                 <div class="radio">
                     <p><input type="radio" value="ADULT" name="Passenger" checked="checked"/>Adult</p>
                     <p><input type="radio" value="CHILD" name="Passenger" />Child</p>
                     <p><input type="radio" value="INFANT" name="Passenger" />Infant</p>
-                </div></form>
+                </div>
+            </form>
             <div>
                 <p id="output"></p>
             </div>

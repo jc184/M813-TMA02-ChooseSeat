@@ -43,12 +43,8 @@ public class SeatingServlet extends HttpServlet {
     SeatTypeEnum seatType;
 //    SeatEnum seatEnum;
 
-//    private int seatNumber;
     SeatPK seatPK = new SeatPK();
 
-    /*
-     * Creates a new instance of SeatManager
-     */
     @Override
     public void init() throws ServletException {
         seatDB = new SeatDB();
@@ -103,7 +99,7 @@ public class SeatingServlet extends HttpServlet {
                 msg = "This seat is already booked. Please choose another seat.";
                 request.setAttribute("msg", msg);
                 url = "/booked.jsp";
-            } else if (seatDB.selectSeatById(seatPK).equals(request.getAttribute("seat"))) {
+            } else if (seatDB.selectSeatById(seatPK).equals(request.getAttribute("seat"))) {// NOT NEEDED??
                 msg = "This seat is already booked. Please choose another seat.";
                 request.setAttribute("msg", msg);
                 url = "/booked.jsp";
@@ -115,9 +111,6 @@ public class SeatingServlet extends HttpServlet {
             url = "/booked.jsp";//?????
         }
 
-        RequestDispatcher dispatcher
-                = getServletContext().getRequestDispatcher(url);
-        dispatcher.forward(request, response);
         return url;
     }
 
@@ -126,14 +119,12 @@ public class SeatingServlet extends HttpServlet {
 
         int id = 2;
         Booking bookingId = new Booking(id);
-        //SeatPK seatPK = new SeatPK();
-        Flight flight = seat.getFlight();
+        //Flight flight = seat.getFlight();
         seatPK.setFlightId(3);
         seatPK.setSeatNo(seatNumber);
         seat.setBookingId(bookingId);
 
         seatNumber = seatPK.getSeatNo();
-        //seatDB.getSeats()[seatNumber] = true;
         seatDB.getSeatingLayout(seatPK.getFlightId())[seatNumber] = true;
         Double seatPrice = null;
         SeatDB.addSeat(seatPK, seatPrice, bookingId);
@@ -205,8 +196,8 @@ public class SeatingServlet extends HttpServlet {
 
     public String showSeats(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         boolean[] seatingLayout = seatDB.getSeatingLayout(seatPK.getFlightId());
-        String url;
-        return url = "/indexRevB.jsp";
+        String url = "/indexRevB.jsp";
+        return url;
     }
 
     /**
@@ -233,73 +224,73 @@ public class SeatingServlet extends HttpServlet {
                     seatNumber = 0;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat02F":
                     seatNumber = 1;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat03F":
                     seatNumber = 2;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat04F":
                     seatNumber = 3;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat05F":
                     seatNumber = 4;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat06F":
                     seatNumber = 5;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat07F":
                     seatNumber = 6;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat08F":
                     seatNumber = 7;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat09F":
                     seatNumber = 8;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat10F":
                     seatNumber = 9;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat11F":
                     seatNumber = 10;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat12F":
                     seatNumber = 11;
                     request.setAttribute("seatNumber", seatNumber);
                     seatType = SeatTypeEnum.FIRSTCLASS;
-                    chooseSeat(request, response);
+                    url = chooseSeat(request, response);
                     break;
                 case "seat13E":
 //                    seatNumber = 12;
@@ -429,15 +420,5 @@ public class SeatingServlet extends HttpServlet {
             Logger.getLogger(SeatingServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
